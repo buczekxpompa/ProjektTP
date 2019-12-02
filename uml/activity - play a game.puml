@@ -1,0 +1,15 @@
+@startuml
+
+(*) --> user.choose_size
+--> system.mark_size
+--> user.choose_bot
+--> system.start_with_parameters
+--> user.play
+--> system.terminate 
+note right
+remach? 
+end note 
+--> (*)
+
+
+@enduml
