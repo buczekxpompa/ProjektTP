@@ -1,0 +1,6 @@
+@startuml
+
+User --> ( play with another user ) 
+User --> ( play with bot ) 
+
+@enduml
