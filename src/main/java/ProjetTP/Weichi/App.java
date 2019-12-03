@@ -1,7 +1,8 @@
 package ProjetTP.Weichi;
 
-import ProjetTP.Weichi.Client.Client;
-import ProjetTP.Weichi.Server.Server;
+
+import ProjetTP.Weichi.client.Client;
+import ProjetTP.Weichi.server.Server;
 
 public class App
 {
