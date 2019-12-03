@@ -2,8 +2,9 @@ package ProjetTP.Weichi.Client;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
-public class sizeFrame extends JFrame {
+public class SizeFrame extends JFrame {
 
         public static final int WYS = 125;
         public static final int SZER = 300;
@@ -11,7 +12,7 @@ public class sizeFrame extends JFrame {
         private JButton thirteen;
         private JButton nineteen;
 
-        public sizeFrame()
+        public void sizeFrame()
         {
             nine = new JButton("9x9");
             thirteen = new JButton("13x13");
@@ -25,4 +26,22 @@ public class sizeFrame extends JFrame {
 
             setVisible(true);
         }
+
+        public void actionPerformed(ActionEvent e) {
+            Object source = e.getSource();
+
+            if(source == nine)
+            {
+
+            }
+            else if(source == thirteen)
+            {
+
+            }
+            else if(source == nineteen)
+            {
+
+            }
+        }
+
 }
