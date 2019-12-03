@@ -1,13 +1,14 @@
-package ProjetTP.Wei-chi;
+package ProjetTP.Weichi;
 
-/**
- * Hello world!
- *
- */
-public class App 
+import ProjetTP.Weichi.Client.Client;
+import ProjetTP.Weichi.Server.Server;
+
+public class App
 {
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+    public static void main( String[] args ) {
+        Thread server = new Server();
+        Thread client = new Client();
+        server.start();
+        client.start();
     }
 }
