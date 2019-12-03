@@ -1,7 +1,8 @@
-package ProjetTP.Weichi.server;
+package projectTP.weichi.server;
 
-import ProjetTP.Weichi.server.exceptions.DidnotConnectException;
-import ProjetTP.Weichi.server.game.Game;
+
+import projectTP.weichi.server.game.Game;
+
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -24,7 +25,7 @@ public class Server extends Thread {
     @Override
     public void run() {
         try { acceptConnection(); }
-        catch (DidnotConnectException ex) {
+        catch (Exception ex) {
             System.out.println("Server did not recive connection");
             interrupt();
         }
@@ -40,7 +41,7 @@ public class Server extends Thread {
         return new Game(bot, size);
     }
 
-    private void acceptConnection() throws DidnotConnectException {
+    private void acceptConnection() throws Exception {
         //TODO: implement
     }
 }
