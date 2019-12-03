@@ -1,6 +1,6 @@
-package projectTP.weichi.Server.game;
+package projectTP.weichi.server.game;
 
-import projectTP.weichi.Server.game.bot.Bot;
+import projectTP.weichi.server.game.bot.Bot;
 
 public class Game {
     boolean player1passed = false;

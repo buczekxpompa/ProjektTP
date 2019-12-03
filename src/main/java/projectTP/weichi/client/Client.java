@@ -1,4 +1,4 @@
-package projectTP.weichi.Client;
+package projectTP.weichi.client;
 
 public class Client extends Thread {
 

@@ -1,10 +1,10 @@
-package projectTP.weichi.Server;
+package projectTP.weichi.server;
 
-import projectTP.weichi.Server.exceptions.DidntConfigureCorrectlyException;
-import projectTP.weichi.Server.exceptions.DidntConnectException;
-import projectTP.weichi.Server.exceptions.DidntCreateServerException;
-import projectTP.weichi.Server.exceptions.ReadingException;
-import projectTP.weichi.Server.game.Game;
+import projectTP.weichi.server.exceptions.DidntConfigureCorrectlyException;
+import projectTP.weichi.server.exceptions.DidntConnectException;
+import projectTP.weichi.server.exceptions.DidntCreateServerException;
+import projectTP.weichi.server.exceptions.ReadingException;
+import projectTP.weichi.server.game.Game;
 
 import java.io.BufferedReader;
 import java.io.IOException;

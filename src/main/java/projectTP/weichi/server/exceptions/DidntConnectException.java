@@ -1,4 +1,4 @@
-package projectTP.weichi.Server.exceptions;
+package projectTP.weichi.server.exceptions;
 
 public class DidntConnectException extends Exception {
 }

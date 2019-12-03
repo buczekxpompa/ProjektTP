@@ -1,4 +1,4 @@
-package projectTP.weichi.Server.exceptions;
+package projectTP.weichi.server.exceptions;
 
 public class DidntCreateServerException extends Exception {
     int port;

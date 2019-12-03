@@ -1,4 +1,4 @@
-package projectTP.weichi.Client;
+package projectTP.weichi.client;
 
 import javax.swing.*;
 import java.awt.*;
