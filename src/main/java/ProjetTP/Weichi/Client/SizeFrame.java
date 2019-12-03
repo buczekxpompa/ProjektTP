@@ -48,15 +48,15 @@ public class SizeFrame extends JFrame {
 
             if(source == nine)
             {
-
+                size=9;
             }
             else if(source == thirteen)
             {
-
+                size=13;
             }
             else if(source == nineteen)
             {
-
+                size=19;
             }
         }
 
