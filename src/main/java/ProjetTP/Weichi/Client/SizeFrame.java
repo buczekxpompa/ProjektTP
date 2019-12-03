@@ -11,18 +11,34 @@ public class SizeFrame extends JFrame {
         private JButton nine;
         private JButton thirteen;
         private JButton nineteen;
+        private JButton botAdd;
+        private JButton playerAdd;
+        boolean bot;
+        int size;
+
+
+        String accept()
+        {
+            String defaultTXT = "{}"
+            return "return dwa kułołty i tyle żeby sie nie przypierdalał";
+        }
+
 
         public void sizeFrame()
         {
             nine = new JButton("9x9");
             thirteen = new JButton("13x13");
             nineteen = new JButton("19x19");
+            botAdd = new JButton("Add a bot");
+            playerAdd = new JButton("Add a player");
 
             setLayout(new FlowLayout());
             setPreferredSize(new Dimension(SZER, WYS));
             add(nine);
             add(thirteen);
             add(nineteen);
+            add(botAdd);
+            add(playerAdd);
 
             setVisible(true);
         }
