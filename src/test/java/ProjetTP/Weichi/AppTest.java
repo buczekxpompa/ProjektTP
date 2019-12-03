@@ -1,4 +1,4 @@
-package ProjetTP.Wei-chi;
+package ProjetTP.Weichi;
 
 import static org.junit.Assert.assertTrue;
 
