@@ -11,7 +11,11 @@ public class GameFrameObserver implements Observer{
 
     @Override
     public void onEvent(MoveEvent event) {
-        client.makeMove(event.getX(), event.getY());
+
     }
 
+    @Override
+    public void onEvent(ObservableEvent event) {
+
+    }
 }

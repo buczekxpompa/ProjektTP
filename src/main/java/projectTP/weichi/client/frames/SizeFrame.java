@@ -9,15 +9,10 @@ import java.awt.event.ActionEvent;
 
 public class SizeFrame extends JFrame implements Observable {
 
-        private JButton nine, thirteen, nineteen, acceptButton, botAdd, playerAdd;
-        private JFrame frame;
+
         boolean bot;
         int size;
         Observer observer;
-
-        private JLabel labelOne, labelTwo;
-        private JPanel panelOne, panelTwo;
-
 
     String accept()
         {
@@ -29,7 +24,7 @@ public class SizeFrame extends JFrame implements Observable {
         public SizeFrame()
         {
             //9x9
-            nine = new JButton("9x9") {
+            JButton nine = new JButton("9x9") {
                 @Override
                 protected void fireActionPerformed(ActionEvent event) {
                     size=9;
@@ -38,7 +33,7 @@ public class SizeFrame extends JFrame implements Observable {
             nine.setPreferredSize(new Dimension(75,30));
 
             //13x13
-            thirteen = new JButton("13x13"){
+            JButton thirteen = new JButton("13x13"){
                 @Override
                 protected void fireActionPerformed(ActionEvent event) {
                     size=13;
@@ -47,7 +42,7 @@ public class SizeFrame extends JFrame implements Observable {
             thirteen.setPreferredSize(new Dimension(75,30));
 
             //19x19
-            nineteen = new JButton("19x19"){
+            JButton nineteen = new JButton("19x19"){
                 @Override
                 protected void fireActionPerformed(ActionEvent event) {
                     size=19;
@@ -56,22 +51,33 @@ public class SizeFrame extends JFrame implements Observable {
             nineteen.setPreferredSize(new Dimension(75,30));
 
             //accept button
-            acceptButton = new JButton(" Accept!"){
+            JButton acceptButton = new JButton("Accept!"){
                 @Override
                 protected void fireActionPerformed(ActionEvent event) {
 
                 }
             };
-            acceptButton.setPreferredSize(new Dimension(75, 30));
-            this.frame.add(acceptButton);
+            acceptButton.setPreferredSize(new Dimension(100, 30));
+            this.add(acceptButton);
 
-            botAdd = new JButton("Bot");
+            JButton botAdd = new JButton("Bot")
+            {
+                @Override
+                protected void fireActionPerformed(ActionEvent event) {
+                    bot=true;
+                }
+            };
             botAdd.setPreferredSize(new Dimension(75, 30));
 
-            playerAdd = new JButton("Player");
+            JButton playerAdd = new JButton("Player")
+            {
+                @Override
+                protected void fireActionPerformed(ActionEvent event) {
+                    bot=false;
+                }
+            };
             playerAdd.setPreferredSize(new Dimension(75, 30));
 
-            setLayout(new FlowLayout());
             setSize(800, 600);
             //add(nine);
            //add(thirteen);
@@ -79,44 +85,61 @@ public class SizeFrame extends JFrame implements Observable {
             //add(botAdd);
             //add(playerAdd);
 
+            setLayout(new FlowLayout());
             //panelOne
-            panelOne = new JPanel();
-            panelOne.setPreferredSize(new Dimension(100,150));
-            labelOne = new JLabel("Choose size");
-            panelOne.add(labelOne);
-            panelOne.add(nine);
-            panelOne.add(thirteen);
-            panelOne.add(nineteen);
+            JPanel panelOne = new JPanel();
+            panelOne.setPreferredSize(new Dimension(800,50));
+            JLabel labelOne = new JLabel("Main menu");
+            panelOne.add(labelOne, BorderLayout.PAGE_START);
+//            panelOne.add(nine);
+//            panelOne.add(thirteen);
+//            panelOne.add(nineteen);
+//            panelOne.add(botAdd);
+//            panelOne.add(playerAdd);
+//            panelOne.add(acceptButton);
             this.add(panelOne);
 
             //panelTwo
-            panelTwo = new JPanel();
-            panelTwo.setPreferredSize(new Dimension(100, 150));
-            labelTwo = new JLabel("Choose opponent");
+            JPanel panelTwo = new JPanel();
+            JLabel labelTwo = new JLabel("Choose size");
+            panelTwo.setLayout(new FlowLayout());
+            panelTwo.setPreferredSize(new  Dimension(800, 50));
             panelTwo.add(labelTwo);
-            panelTwo.add(botAdd);
-            panelTwo.add(playerAdd);
+            panelTwo.add(nine);
+            panelTwo.add(thirteen);
+            panelTwo.add(nineteen);
             this.add(panelTwo);
+
+            //panelThree
+            JPanel panelThree = new JPanel();
+            JLabel labelThree = new JLabel("Choose opponent");
+            panelThree.setPreferredSize(new Dimension(800, 50));
+            panelThree.setLayout(new FlowLayout());
+            panelThree.add(labelThree);
+            panelThree.add(botAdd);
+            panelThree.add(playerAdd);
+
+            this.add(panelThree);
+
+            JPanel panelFour = new JPanel();
+            panelFour.setPreferredSize(new Dimension(800, 50));
+            panelFour.setLayout(new FlowLayout());
+            panelFour.add(acceptButton);
+            this.add(panelFour);
+
 
             setVisible(true);
             setDefaultCloseOperation(EXIT_ON_CLOSE); //tak bedzie
         }
 
-        public void actionPerformed(ActionEvent e) {
-            Object source = e.getSource();
 
-            if(source == nine)
-            {
-                size=9;
-            }
-            else if(source == thirteen)
-            {
-                size=13;
-            }
-            else if(source == nineteen)
-            {
-                size=19;
-            }
-        }
+    @Override
+    public void addObserver(Observer observer) {
 
+    }
+
+    @Override
+    public void removeObserver() {
+
+    }
 }
