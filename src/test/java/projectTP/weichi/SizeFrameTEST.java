@@ -6,8 +6,8 @@ import projectTP.weichi.client.SizeFrame;
 
 public class SizeFrameTEST {
 
-    @Test
-    public void sizeFrame()
+
+    public static void main(String []args)
     {
         SizeFrame Okno = new SizeFrame();
     }

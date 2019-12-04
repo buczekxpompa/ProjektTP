@@ -4,7 +4,8 @@ package projectTP.weichi;
 
 import org.junit.Test;
 
-import static org.testng.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+
 
 /**
  * Unit test for simple App.

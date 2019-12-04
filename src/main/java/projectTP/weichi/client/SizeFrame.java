@@ -6,39 +6,62 @@ import java.awt.event.ActionEvent;
 
 public class SizeFrame extends JFrame {
 
-        public static final int WYS = 125;
-        public static final int SZER = 300;
+        //public static final int WYS = 1024;
+        //public static final int SZER = 768;
         private JButton nine;
         private JButton thirteen;
         private JButton nineteen;
         private JButton botAdd;
         private JButton playerAdd;
+        private JFrame frame;
         boolean bot;
         int size;
 
+        private JLabel labelOne, labelTwo;
+        private JPanel panelOne, panelTwo;
 
-        String accept()
+
+    String accept()
         {
             String defaultTXT = "{}";
             return "return dwa kułołty i tyle żeby sie nie przypierdalał";
         }
 
 
-        public void sizeFrame()
+        public SizeFrame()
         {
             nine = new JButton("9x9");
             thirteen = new JButton("13x13");
             nineteen = new JButton("19x19");
-            botAdd = new JButton("Add a bot");
-            playerAdd = new JButton("Add a player");
+            botAdd = new JButton("Bot");
+            playerAdd = new JButton("Player");
 
             setLayout(new FlowLayout());
-            setPreferredSize(new Dimension(SZER, WYS));
-            add(nine);
-            add(thirteen);
-            add(nineteen);
-            add(botAdd);
-            add(playerAdd);
+            setSize(800, 600);
+            //add(nine);
+           //add(thirteen);
+            //add(nineteen);
+            //add(botAdd);
+            //add(playerAdd);
+
+            //panelOne
+            panelOne = new JPanel();
+            panelOne.setPreferredSize(new Dimension(150,150));
+            labelOne = new JLabel("Choose size");
+            panelOne.add(labelOne);
+            panelOne.add(nine);
+            panelOne.add(thirteen);
+            panelOne.add(nineteen);
+            this.add(panelOne);
+
+            //panelTwo
+            panelTwo = new JPanel();
+            panelTwo.setPreferredSize(new Dimension(150, 150));
+            labelTwo = new JLabel("Choose opponent");
+            panelTwo.add(labelTwo);
+            panelTwo.add(botAdd);
+            panelTwo.add(playerAdd);
+            this.add(panelTwo);
 
             setVisible(true);
         }
