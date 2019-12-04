@@ -26,6 +26,7 @@ public class Client extends Thread {
     private void startSizeFrame() {
         SizeFrame sizeFrame = new SizeFrame();
         SizeFrameObserver sizeFrameObserver = new SizeFrameObserver(this);
+        sizeFrame.addObserver(sizeFrameObserver);
     }
 
     @Override
