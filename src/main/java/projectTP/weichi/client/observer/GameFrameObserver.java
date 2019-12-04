@@ -1,6 +1,5 @@
 package projectTP.weichi.client.observer;
 
-import org.graalvm.compiler.lir.sparc.SPARCMove;
 import projectTP.weichi.client.Client;
 
 public class GameFrameObserver implements Observer{

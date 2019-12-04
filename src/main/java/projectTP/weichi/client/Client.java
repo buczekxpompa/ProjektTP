@@ -19,16 +19,17 @@ public class Client extends Thread {
     private GameFrame gameFrame;
 
     public Client() {
-        super();
         connect();
+        startSizeFrame();
+    }
+
+    private void startSizeFrame() {
+        SizeFrame sizeFrame = new SizeFrame();
+        SizeFrameObserver sizeFrameObserver = new SizeFrameObserver(this);
     }
 
     @Override
     public void run() {
-
-        //TODO: set up the game
-        SizeFrame sizeframe = new SizeFrame();
-        SizeFrameObserver sizeFrameObserver = new SizeFrameObserver(this);
         //TODO: play
         GameFrameObserver gameFrameObserver = new GameFrameObserver(this);
         gameFrame.addObserver(gameFrameObserver);
@@ -53,6 +54,8 @@ public class Client extends Thread {
         //TODO: send to server in JSON
     }
     public void createGame(boolean bot, int size) {
+        gameFrame = new GameFrame(size);
+        this.start();
         //TODO: send to server in JSON
     }
 }
