@@ -46,7 +46,7 @@ public class SizeFrame extends JFrame implements Observable {
         JButton acceptButton = new JButton(" Accept!"){
                 @Override
                 protected void fireActionPerformed(ActionEvent event) {
-                    observer.onEvent(new ObservableEvent(bot, size));
+                    accept();
                 }
             };
         acceptButton.setPreferredSize(new Dimension(75, 30));
@@ -70,13 +70,8 @@ public class SizeFrame extends JFrame implements Observable {
 
         setLayout(new FlowLayout());
         setSize(800, 600);
-        //add(nine);
-           //add(thirteen);
-            //add(nineteen);
-            //add(botAdd);
-            //add(playerAdd);
 
-            //panelOne
+        //panelOne
         JPanel panelOne = new JPanel();
         panelOne.setPreferredSize(new Dimension(100,150));
         panelOne.add(new JLabel("Choose size"));
@@ -95,6 +90,11 @@ public class SizeFrame extends JFrame implements Observable {
 
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE); //tak bedzie
+    }
+
+    private void accept() {
+        observer.onEvent(new ObservableEvent(bot, size));
+        this.dispose();
     }
 
     @Override
