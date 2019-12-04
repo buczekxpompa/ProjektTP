@@ -1,10 +1,13 @@
 package projectTP.weichi.server.game;
 
-import projectTP.weichi.server.game.bot.Bot;
+import projectTP.weichi.server.support.Point;
+
 
 public class Game {
-    boolean player1passed = false;
-    boolean player2passed = false;
+
+    boolean blackPassed = false;
+    boolean whitePassed = false;
+
     Bot aiBot = null;
     int boardSize;
 
@@ -18,7 +21,9 @@ public class Game {
     }
 
     public boolean won() {
+        return blackPassed && whitePassed;
+    }
+    public void move(Point x) {
 
-        return player1passed && player2passed;
     }
 }
