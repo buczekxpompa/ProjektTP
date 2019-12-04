@@ -8,11 +8,7 @@ public class SizeFrame extends JFrame {
 
         //public static final int WYS = 1024;
         //public static final int SZER = 768;
-        private JButton nine;
-        private JButton thirteen;
-        private JButton nineteen;
-        private JButton botAdd;
-        private JButton playerAdd;
+        private JButton nine, thirteen, nineteen, acceptButton, botAdd, playerAdd;
         private JFrame frame;
         boolean bot;
         int size;
@@ -30,12 +26,42 @@ public class SizeFrame extends JFrame {
 
         public SizeFrame()
         {
-            nine = new JButton("9x9");
+            //9x9
+            nine = new JButton("9x9") {
+                @Override
+                protected void fireActionPerformed(ActionEvent event) {
+                    size=9;
+                }
+            };
             nine.setPreferredSize(new Dimension(75,30));
-            thirteen = new JButton("13x13");
+
+            //13x13
+            thirteen = new JButton("13x13"){
+                @Override
+                protected void fireActionPerformed(ActionEvent event) {
+                    size=13;
+                }
+            };
             thirteen.setPreferredSize(new Dimension(75,30));
-            nineteen = new JButton("19x19");
+
+            //19x19
+            nineteen = new JButton("19x19"){
+                @Override
+                protected void fireActionPerformed(ActionEvent event) {
+                    size=19;
+                }
+            };
             nineteen.setPreferredSize(new Dimension(75,30));
+
+            //accept button
+            acceptButton = new JButton(" Accept!"){
+                @Override
+                protected void fireActionPerformed(ActionEvent event) {
+
+                }
+            };
+            acceptButton.setPreferredSize(new Dimension(75, 30));
+            this.frame.add(acceptButton);
 
             botAdd = new JButton("Bot");
             botAdd.setPreferredSize(new Dimension(75, 30));
