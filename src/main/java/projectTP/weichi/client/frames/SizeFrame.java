@@ -1,10 +1,13 @@
-package projectTP.weichi.client;
+package projectTP.weichi.client.frames;
+
+import projectTP.weichi.client.observer.Observable;
+import projectTP.weichi.client.observer.Observer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class SizeFrame extends JFrame {
+public class SizeFrame extends JFrame implements Observable {
 
         //public static final int WYS = 1024;
         //public static final int SZER = 768;
@@ -16,6 +19,7 @@ public class SizeFrame extends JFrame {
         private JFrame frame;
         boolean bot;
         int size;
+        Observer observer;
 
         private JLabel labelOne, labelTwo;
         private JPanel panelOne, panelTwo;
@@ -83,4 +87,13 @@ public class SizeFrame extends JFrame {
             }
         }
 
+    @Override
+    public void addObserver(Observer observer) {
+        this.observer = observer;
+    }
+
+    @Override
+    public void removeObserver() {
+        this.observer = null;
+    }
 }

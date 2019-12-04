@@ -1,7 +1,10 @@
 package projectTP.weichi.client;
 
 import projectTP.weichi.client.frames.GameFrame;
-import projectTP.weichi.server.exceptions.DidntConfigureCorrectlyException;
+import projectTP.weichi.client.frames.SizeFrame;
+import projectTP.weichi.client.observer.GameFrameObserver;
+import projectTP.weichi.client.observer.ObservableEvent;
+import projectTP.weichi.client.observer.Observer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,6 +17,8 @@ public class Client extends Thread {
     Socket socket;
     private PrintWriter output;
     private BufferedReader input;
+    private GameFrame gameFrame;
+    private Observer gameFrameObserver;
 
     public Client() {
         super();
@@ -26,6 +31,8 @@ public class Client extends Thread {
         //TODO: set up the game
         new SizeFrame();
         //TODO: play
+        gameFrameObserver = new GameFrameObserver(this);
+        gameFrame.addObserver(gameFrameObserver);
 
         // rematch?
     }
@@ -41,5 +48,9 @@ public class Client extends Thread {
             System.out.println("Buffers' configuration problems occurred (Client).");
         }
 
+    }
+
+    public void makeMove(int x, int y) {
+        //TODO: send to server in JSON
     }
 }
