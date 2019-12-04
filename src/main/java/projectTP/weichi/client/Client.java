@@ -3,8 +3,7 @@ package projectTP.weichi.client;
 import projectTP.weichi.client.frames.GameFrame;
 import projectTP.weichi.client.frames.SizeFrame;
 import projectTP.weichi.client.observer.GameFrameObserver;
-import projectTP.weichi.client.observer.ObservableEvent;
-import projectTP.weichi.client.observer.Observer;
+import projectTP.weichi.client.observer.SizeFrameObserver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +17,6 @@ public class Client extends Thread {
     private PrintWriter output;
     private BufferedReader input;
     private GameFrame gameFrame;
-    private Observer gameFrameObserver;
 
     public Client() {
         super();
@@ -29,9 +27,10 @@ public class Client extends Thread {
     public void run() {
 
         //TODO: set up the game
-        new SizeFrame();
+        SizeFrame sizeframe = new SizeFrame();
+        SizeFrameObserver sizeFrameObserver = new SizeFrameObserver(this);
         //TODO: play
-        gameFrameObserver = new GameFrameObserver(this);
+        GameFrameObserver gameFrameObserver = new GameFrameObserver(this);
         gameFrame.addObserver(gameFrameObserver);
 
         // rematch?
@@ -51,6 +50,9 @@ public class Client extends Thread {
     }
 
     public void makeMove(int x, int y) {
+        //TODO: send to server in JSON
+    }
+    public void createGame(boolean bot, int size) {
         //TODO: send to server in JSON
     }
 }

@@ -1,18 +1,15 @@
 package projectTP.weichi.client.observer;
 
-import org.graalvm.compiler.lir.sparc.SPARCMove;
 import projectTP.weichi.client.Client;
 
-public class GameFrameObserver implements Observer{
+public class SizeFrameObserver implements Observer{
     Client client;
 
-    public GameFrameObserver(Client c){
+    public SizeFrameObserver(Client c) {
         client = c;
     }
-
     @Override
     public void onEvent(ObservableEvent event) {
-        client.makeMove(event.getX(), event.getY());
+        client.createGame(event.getBot(), event.getSize());
     }
-
 }
