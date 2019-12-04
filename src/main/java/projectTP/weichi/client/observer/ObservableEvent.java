@@ -13,7 +13,7 @@ public class ObservableEvent {
         this.size = size;
     }
 
-    ObservableEvent(int x, int y) {
+    public ObservableEvent(int x, int y) {
         this.x = x;
         this.y = y;
         bot = false;

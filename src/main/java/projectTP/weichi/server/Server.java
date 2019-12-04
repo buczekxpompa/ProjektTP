@@ -23,22 +23,23 @@ public class Server extends Thread {
     public Server() {
         try {
             makeServer();
-            connect();
-        }
-        catch (DidntConnectException ex) {
-            System.out.println("Server didn't connect.");
-            interrupt();
         }
         catch (DidntCreateServerException ex) {
             System.out.println("Could not create server on port " + ex.getPort() + ".");
         }
-        catch (DidntConfigureCorrectlyException ex) {
-            System.out.println("Buffers' configuration problems occurred (Server).");
-        }
+
     }
 
     @Override
     public void run() {
+        try {
+            connect();
+        } catch (DidntConnectException ex) {
+                System.out.println("Server didn't connect.");
+                interrupt();
+        } catch (DidntConfigureCorrectlyException ex) {
+            System.out.println("Buffers' configuration problems occurred (Server).");
+        }
         game = createGame();
         play();
         // rematch?

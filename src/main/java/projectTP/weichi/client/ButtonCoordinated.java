@@ -1,13 +1,14 @@
 package projectTP.weichi.client;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 
-public class ButtonCoordinates extends JButton
+public class ButtonCoordinated extends JButton
 {
     private int x;
     private int y;
 
-    public ButtonCoordinates(int x, int y)
+    public ButtonCoordinated(int x, int y)
     {
         super();
         this.x = x;
