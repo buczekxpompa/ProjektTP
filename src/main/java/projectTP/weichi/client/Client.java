@@ -1,7 +1,6 @@
 package projectTP.weichi.client;
 
-import projectTP.weichi.client.frames.GameFrame;
-import projectTP.weichi.server.exceptions.DidntConfigureCorrectlyException;
+import projectTP.weichi.client.frames.SizeFrame;
 
 import java.io.BufferedReader;
 import java.io.IOException;

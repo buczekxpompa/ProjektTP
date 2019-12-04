@@ -1,4 +1,4 @@
-package projectTP.weichi.client;
+package projectTP.weichi.client.frames;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,10 +31,17 @@ public class SizeFrame extends JFrame {
         public SizeFrame()
         {
             nine = new JButton("9x9");
+            nine.setPreferredSize(new Dimension(75,30));
             thirteen = new JButton("13x13");
+            thirteen.setPreferredSize(new Dimension(75,30));
             nineteen = new JButton("19x19");
+            nineteen.setPreferredSize(new Dimension(75,30));
+
             botAdd = new JButton("Bot");
+            botAdd.setPreferredSize(new Dimension(75, 30));
+
             playerAdd = new JButton("Player");
+            playerAdd.setPreferredSize(new Dimension(75, 30));
 
             setLayout(new FlowLayout());
             setSize(800, 600);
@@ -46,7 +53,7 @@ public class SizeFrame extends JFrame {
 
             //panelOne
             panelOne = new JPanel();
-            panelOne.setPreferredSize(new Dimension(150,150));
+            panelOne.setPreferredSize(new Dimension(100,150));
             labelOne = new JLabel("Choose size");
             panelOne.add(labelOne);
             panelOne.add(nine);
@@ -56,7 +63,7 @@ public class SizeFrame extends JFrame {
 
             //panelTwo
             panelTwo = new JPanel();
-            panelTwo.setPreferredSize(new Dimension(150, 150));
+            panelTwo.setPreferredSize(new Dimension(100, 150));
             labelTwo = new JLabel("Choose opponent");
             panelTwo.add(labelTwo);
             panelTwo.add(botAdd);
@@ -64,6 +71,7 @@ public class SizeFrame extends JFrame {
             this.add(panelTwo);
 
             setVisible(true);
+            setDefaultCloseOperation(EXIT_ON_CLOSE); //tak bedzie
         }
 
         public void actionPerformed(ActionEvent e) {

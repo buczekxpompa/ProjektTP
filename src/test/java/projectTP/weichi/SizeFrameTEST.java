@@ -1,8 +1,7 @@
 package projectTP.weichi;
 
 
-import org.junit.Test;
-import projectTP.weichi.client.SizeFrame;
+import projectTP.weichi.client.frames.SizeFrame;
 
 public class SizeFrameTEST {
 
