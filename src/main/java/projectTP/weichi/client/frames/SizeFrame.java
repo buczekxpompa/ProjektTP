@@ -1,14 +1,19 @@
 package projectTP.weichi.client.frames;
 
+import projectTP.weichi.client.observer.Observable;
+import projectTP.weichi.client.observer.Observer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class SizeFrame extends JFrame {
+public class SizeFrame extends JFrame implements Observable {
 
-
+        private JButton nine, thirteen, nineteen, acceptButton, botAdd, playerAdd;
+        private JFrame frame;
         boolean bot;
         int size;
+        Observer observer;
 
         private JLabel labelOne, labelTwo;
         private JPanel panelOne, panelTwo;
@@ -24,7 +29,7 @@ public class SizeFrame extends JFrame {
         public SizeFrame()
         {
             //9x9
-            JButton nine = new JButton("9x9") {
+            nine = new JButton("9x9") {
                 @Override
                 protected void fireActionPerformed(ActionEvent event) {
                     size=9;
@@ -33,7 +38,7 @@ public class SizeFrame extends JFrame {
             nine.setPreferredSize(new Dimension(75,30));
 
             //13x13
-            JButton thirteen = new JButton("13x13"){
+            thirteen = new JButton("13x13"){
                 @Override
                 protected void fireActionPerformed(ActionEvent event) {
                     size=13;
@@ -42,7 +47,7 @@ public class SizeFrame extends JFrame {
             thirteen.setPreferredSize(new Dimension(75,30));
 
             //19x19
-            JButton nineteen = new JButton("19x19"){
+            nineteen = new JButton("19x19"){
                 @Override
                 protected void fireActionPerformed(ActionEvent event) {
                     size=19;
@@ -51,19 +56,19 @@ public class SizeFrame extends JFrame {
             nineteen.setPreferredSize(new Dimension(75,30));
 
             //accept button
-            JButton acceptButton = new JButton(" Accept!"){
+            acceptButton = new JButton(" Accept!"){
                 @Override
                 protected void fireActionPerformed(ActionEvent event) {
 
                 }
             };
             acceptButton.setPreferredSize(new Dimension(75, 30));
+            this.frame.add(acceptButton);
 
-
-            JButton botAdd = new JButton("Bot");
+            botAdd = new JButton("Bot");
             botAdd.setPreferredSize(new Dimension(75, 30));
 
-            JButton playerAdd = new JButton("Player");
+            playerAdd = new JButton("Player");
             playerAdd.setPreferredSize(new Dimension(75, 30));
 
             setLayout(new FlowLayout());
@@ -93,13 +98,25 @@ public class SizeFrame extends JFrame {
             panelTwo.add(playerAdd);
             this.add(panelTwo);
 
-            //accept button
-            this.add(acceptButton);
-
             setVisible(true);
             setDefaultCloseOperation(EXIT_ON_CLOSE); //tak bedzie
         }
 
+        public void actionPerformed(ActionEvent e) {
+            Object source = e.getSource();
 
+            if(source == nine)
+            {
+                size=9;
+            }
+            else if(source == thirteen)
+            {
+                size=13;
+            }
+            else if(source == nineteen)
+            {
+                size=19;
+            }
+        }
 
 }

@@ -13,9 +13,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server extends Thread {
-    private Game game = null;
+    private Game game;
     private ServerSocket server;
-    private Socket socket = null;
+    private Socket socket;
     private BufferedReader input;
     private PrintWriter output;
     private String line;
@@ -45,7 +45,6 @@ public class Server extends Thread {
     }
 
     private void play() {
-        boolean blacksTurn = true;
         do {
             readInput();
             Point x = Parser.parsePoint(line);

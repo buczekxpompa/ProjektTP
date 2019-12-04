@@ -2,10 +2,13 @@ package projectTP.weichi.client.frames;
 
 import projectTP.weichi.client.ButtonCoordinates;
 
+import projectTP.weichi.client.observer.Observable;
+import projectTP.weichi.client.observer.Observer;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class GameFrame extends JPanel
+public class GameFrame extends JPanel implements Observable
 {
     GameFrame(int size)
     {
@@ -21,5 +24,14 @@ public class GameFrame extends JPanel
 
             }
         }
+    }
+    @Override
+    public void addObserver(Observer observer) {
+
+    }
+
+    @Override
+    public void removeObserver() {
+
     }
 }
