@@ -9,9 +9,14 @@ public class GameFrameObserver implements Observer{
         client = c;
     }
 
+
     @Override
-    public void onEvent(ObservableEvent event) {
-        client.makeMove(event.getX(), event.getY());
+    public void onEvent(MoveEvent event) {
+
     }
 
+    @Override
+    public void onEvent(ObservableEvent event) {
+
+    }
 }

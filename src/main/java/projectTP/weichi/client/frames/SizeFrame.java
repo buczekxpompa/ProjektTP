@@ -68,29 +68,59 @@ public class SizeFrame extends JFrame implements Observable {
             };
         playerAdd.setPreferredSize(new Dimension(75, 30));
 
-        setLayout(new FlowLayout());
-        setSize(800, 600);
+            setSize(800, 600);
+            //add(nine);
+           //add(thirteen);
+            //add(nineteen);
+            //add(botAdd);
+            //add(playerAdd);
 
-        //panelOne
-        JPanel panelOne = new JPanel();
-        panelOne.setPreferredSize(new Dimension(100,150));
-        panelOne.add(new JLabel("Choose size"));
-        panelOne.add(nine);
-        panelOne.add(thirteen);
-        panelOne.add(nineteen);
-        this.add(panelOne);
+            setLayout(new FlowLayout());
+            //panelOne
+            JPanel panelOne = new JPanel();
+            panelOne.setPreferredSize(new Dimension(800,50));
+            JLabel labelOne = new JLabel("Main menu");
+            panelOne.add(labelOne, BorderLayout.PAGE_START);
+//            panelOne.add(nine);
+//            panelOne.add(thirteen);
+//            panelOne.add(nineteen);
+//            panelOne.add(botAdd);
+//            panelOne.add(playerAdd);
+//            panelOne.add(acceptButton);
+            this.add(panelOne);
 
-        //panelTwo
-        JPanel panelTwo = new JPanel();
-        panelTwo.setPreferredSize(new Dimension(100, 150));
-        panelTwo.add(new JLabel("Choose opponent"));
-        panelTwo.add(botAdd);
-        panelTwo.add(playerAdd);
-        this.add(panelTwo);
+            //panelTwo
+            JPanel panelTwo = new JPanel();
+            JLabel labelTwo = new JLabel("Choose size");
+            panelTwo.setLayout(new FlowLayout());
+            panelTwo.setPreferredSize(new  Dimension(800, 50));
+            panelTwo.add(labelTwo);
+            panelTwo.add(nine);
+            panelTwo.add(thirteen);
+            panelTwo.add(nineteen);
+            this.add(panelTwo);
 
-        setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE); //tak bedzie
-    }
+            //panelThree
+            JPanel panelThree = new JPanel();
+            JLabel labelThree = new JLabel("Choose opponent");
+            panelThree.setPreferredSize(new Dimension(800, 50));
+            panelThree.setLayout(new FlowLayout());
+            panelThree.add(labelThree);
+            panelThree.add(botAdd);
+            panelThree.add(playerAdd);
+
+            this.add(panelThree);
+
+            JPanel panelFour = new JPanel();
+            panelFour.setPreferredSize(new Dimension(800, 50));
+            panelFour.setLayout(new FlowLayout());
+            panelFour.add(acceptButton);
+            this.add(panelFour);
+
+
+            setVisible(true);
+            setDefaultCloseOperation(EXIT_ON_CLOSE); //tak bedzie
+        }
 
     private void accept() {
         observer.onEvent(new ObservableEvent(bot, size));
