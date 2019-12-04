@@ -1,10 +1,9 @@
 package projectTP.weichi.server;
 
-import projectTP.weichi.server.exceptions.DidntConfigureCorrectlyException;
-import projectTP.weichi.server.exceptions.DidntConnectException;
-import projectTP.weichi.server.exceptions.DidntCreateServerException;
-import projectTP.weichi.server.exceptions.ReadingException;
+import projectTP.weichi.server.exceptions.*;
 import projectTP.weichi.server.game.Game;
+import projectTP.weichi.server.support.GameConfig;
+import projectTP.weichi.server.support.Point;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,8 +20,7 @@ public class Server extends Thread {
     private PrintWriter output;
     private String line;
 
-    @Override
-    public void run() {
+    public Server() {
         try {
             makeServer();
             connect();
@@ -35,26 +33,31 @@ public class Server extends Thread {
             System.out.println("Could not create server on port " + ex.getPort() + ".");
         }
         catch (DidntConfigureCorrectlyException ex) {
-            System.out.println("Buffers' configuration occurred.");
+            System.out.println("Buffers' configuration problems occurred (Server).");
         }
+    }
 
-
-        try {
-            game = createGame();
-        }
-        catch (ReadingException ex) {
-            System.out.println("Reading problem occurred.");
-        }
-
-        do {
-            play();
-        } while(!game.won());
-
+    @Override
+    public void run() {
+        game = createGame();
+        play();
         // rematch?
     }
 
     private void play() {
-        //TODO: implement
+        boolean blacksTurn = true;
+        do {
+            readInput();
+            Point x = Parser.parsePoint(line);
+            game.move(x);
+        } while(!game.won());
+    }
+
+    private void readInput() {
+        try { line = input.readLine(); }
+        catch (IOException e) {
+            System.out.println("Reading problem occurred.");
+        }
     }
 
     private void makeServer() throws DidntCreateServerException {
@@ -82,13 +85,9 @@ public class Server extends Thread {
         }
     }
 
-    private Game createGame() throws ReadingException {
-        try {
-            line = input.readLine();
-        } catch (IOException e) {
-            throw new ReadingException();
-        }
-        //TODO: make args not static
-        return new Game(false, 19);
+    private Game createGame() {
+        readInput();
+        GameConfig config= Parser.parseGameConfig();
+        return new Game(config.getBot(), config.getSize());
     }
 }
