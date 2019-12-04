@@ -1,6 +1,7 @@
 package projectTP.weichi.client.frames;
 
 import projectTP.weichi.client.observer.Observable;
+import projectTP.weichi.client.observer.ObservableEvent;
 import projectTP.weichi.client.observer.Observer;
 
 import javax.swing.*;
@@ -14,23 +15,20 @@ public class SizeFrame extends JFrame implements Observable {
         int size;
         Observer observer;
 
-    String accept()
-        {
-            String defaultTXT = "{}";
-            return "return dwa kułołty i tyle żeby sie nie przypierdalał";
-        }
-
-
         public SizeFrame()
         {
             //9x9
             JButton nine = new JButton("9x9") {
+    public SizeFrame()
+    {
+        //9x9
+        JButton nine = new JButton("9x9") {
                 @Override
                 protected void fireActionPerformed(ActionEvent event) {
                     size=9;
                 }
             };
-            nine.setPreferredSize(new Dimension(75,30));
+        nine.setPreferredSize(new Dimension(75,30));
 
             //13x13
             JButton thirteen = new JButton("13x13"){
@@ -39,7 +37,7 @@ public class SizeFrame extends JFrame implements Observable {
                     size=13;
                 }
             };
-            thirteen.setPreferredSize(new Dimension(75,30));
+        thirteen.setPreferredSize(new Dimension(75,30));
 
             //19x19
             JButton nineteen = new JButton("19x19"){
