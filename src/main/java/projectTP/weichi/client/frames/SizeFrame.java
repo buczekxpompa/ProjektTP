@@ -11,11 +11,7 @@ public class SizeFrame extends JFrame implements Observable {
 
         //public static final int WYS = 1024;
         //public static final int SZER = 768;
-        private JButton nine;
-        private JButton thirteen;
-        private JButton nineteen;
-        private JButton botAdd;
-        private JButton playerAdd;
+        private JButton nine, thirteen, nineteen, acceptButton, botAdd, playerAdd;
         private JFrame frame;
         boolean bot;
         int size;
