@@ -9,8 +9,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class SizeFrame extends JFrame implements Observable {
-    boolean bot;
-    int size;
+    boolean bot = false;
+    int size = 19;
     Observer observer;
 
     public SizeFrame()
@@ -19,54 +19,54 @@ public class SizeFrame extends JFrame implements Observable {
         JButton nine = new JButton("9x9") {
                 @Override
                 protected void fireActionPerformed(ActionEvent event) {
-                    size=9;
+                    size = 9;
                 }
             };
         nine.setPreferredSize(new Dimension(75,30));
 
-        //13x13
-        JButton thirteen = new JButton("13x13"){
-                @Override
-                protected void fireActionPerformed(ActionEvent event) {
-                    size=13;
-                }
-            };
-        thirteen.setPreferredSize(new Dimension(75,30));
+                //13x13
+                JButton thirteen = new JButton("13x13") {
+                    @Override
+                    protected void fireActionPerformed(ActionEvent event) {
+                        size = 13;
+                    }
+                };
+                thirteen.setPreferredSize(new Dimension(75, 30));
 
-        //19x19
-        JButton nineteen = new JButton("19x19"){
-                @Override
-                protected void fireActionPerformed(ActionEvent event) {
-                    size=19;
-                }
-            };
-        nineteen.setPreferredSize(new Dimension(75,30));
+                //19x19
+                JButton nineteen = new JButton("19x19") {
+                    @Override
+                    protected void fireActionPerformed(ActionEvent event) {
+                        size = 19;
+                    }
+                };
+                nineteen.setPreferredSize(new Dimension(75, 30));
 
-        //accept button
-        JButton acceptButton = new JButton(" Accept!"){
-                @Override
-                protected void fireActionPerformed(ActionEvent event) {
-                    accept();
-                }
-            };
-        acceptButton.setPreferredSize(new Dimension(75, 30));
-        this.add(acceptButton);
+                //accept button
+                JButton acceptButton = new JButton("Accept!") {
+                    @Override
+                    protected void fireActionPerformed(ActionEvent event) {
+                        accept();
+                    }
+                };
+                acceptButton.setPreferredSize(new Dimension(100, 30));
+                this.add(acceptButton);
 
-        JButton botAdd = new JButton("Bot") {
-                @Override
-                protected void fireActionPerformed(ActionEvent event) {
-                    bot = true;
-                }
-            };
-        botAdd.setPreferredSize(new Dimension(75, 30));
+                JButton botAdd = new JButton("Bot") {
+                    @Override
+                    protected void fireActionPerformed(ActionEvent event) {
+                        bot = true;
+                    }
+                };
+                botAdd.setPreferredSize(new Dimension(75, 30));
 
-        JButton playerAdd = new JButton("Player"){
-                @Override
-                protected void fireActionPerformed(ActionEvent event) {
-                    bot = false;
-                }
-            };
-        playerAdd.setPreferredSize(new Dimension(75, 30));
+                JButton playerAdd = new JButton("Player") {
+                    @Override
+                    protected void fireActionPerformed(ActionEvent event) {
+                        bot = false;
+                    }
+                };
+                playerAdd.setPreferredSize(new Dimension(75, 30));
 
             setSize(800, 600);
             //add(nine);

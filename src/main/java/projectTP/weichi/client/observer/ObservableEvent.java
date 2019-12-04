@@ -1,10 +1,10 @@
 package projectTP.weichi.client.observer;
 
 public class ObservableEvent {
-    int x;
-    int y;
-    boolean bot;
-    int size;
+    private int x;
+    private int y;
+    private boolean bot;
+    private int size;
 
     public ObservableEvent(boolean bot, int size) {
         x = -1;
