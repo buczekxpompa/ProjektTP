@@ -5,19 +5,19 @@ import projectTP.weichi.server.support.Point;
 
 // make it singleton?
 public class ServerParserJson implements ServerParser {
-    String line;
+    private String parsedLine;
 
     ServerParserJson(String line) {
-        this.line = line;
+        this.parsedLine = line;
     }
 
     @Override
     public Point parsePoint() {
         int x = -1;
         int y = -1;
-        String[] args = line.split("\"");
+        String[] args = parsedLine.split("\"");
         for(int i = 0; i < args.length; i++) {
-            System.out.println(args[i]);
+
             if(args[i].contentEquals("x")) {
                 try { x = Integer.parseInt(args[i+2]); }
                 catch (NumberFormatException e) {
@@ -37,9 +37,8 @@ public class ServerParserJson implements ServerParser {
     public GameConfig parseGameConfig() {
         boolean bot = true;
         int size = -1;
-        String[] args = line.split("\"");
+        String[] args = parsedLine.split("\"");
         for(int i = 0; i < args.length; i++) {
-            System.out.println(args[i]);
             if(args[i].contentEquals("bot")) {
                 try { bot = Boolean.parseBoolean(args[i+2]); }
                 catch (NumberFormatException e) {

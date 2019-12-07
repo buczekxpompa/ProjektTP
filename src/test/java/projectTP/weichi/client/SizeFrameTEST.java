@@ -1,4 +1,4 @@
-package projectTP.weichi;
+package projectTP.weichi.client;
 
 
 import projectTP.weichi.client.frames.SizeFrame;
