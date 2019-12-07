@@ -1,8 +1,8 @@
 package projectTP.weichi.server.support;
 
 public class Point {
-    private int x;
-    private int y;
+    protected int x;
+    protected int y;
 
     public Point() {
         x = 0;

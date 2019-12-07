@@ -50,7 +50,8 @@ public class Server extends Thread {
             readInput();
             ServerParser parser = new ServerParserJson(line);
             Point x = parser.parsePoint();
-            game.move(x);
+            String response = parser.parseMoveResponse(game.move(x));
+            output.println(response);
         } while(!game.won());
     }
 

@@ -4,6 +4,8 @@ import projectTP.weichi.client.frames.GameFrame;
 import projectTP.weichi.client.frames.SizeFrame;
 import projectTP.weichi.client.observer.GameFrameObserver;
 import projectTP.weichi.client.observer.SizeFrameObserver;
+import projectTP.weichi.server.support.ColoredPoint;
+import projectTP.weichi.server.support.Point;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,9 +13,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 public class Client extends Thread {
-    Socket socket;
+    private String line;
     private PrintWriter output;
     private BufferedReader input;
     private GameFrame gameFrame;
@@ -40,7 +43,7 @@ public class Client extends Thread {
 
     private void connect() {
         try {
-            socket = new Socket("localhost",4999);
+            Socket socket = new Socket("localhost", 4999);
             output = new PrintWriter(socket.getOutputStream(),true);
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (UnknownHostException e) {
@@ -54,11 +57,21 @@ public class Client extends Thread {
     public void makeMove(int x, int y) {
         ClientParser parser = new ClientParserJson(x, y);
         output.println(parser.prepareMove());
+        readInput();
+        ArrayList<ColoredPoint> changes = parser.parseResponse(line);
+        gameFrame.updateState(changes);
     }
+
     public void createGame(boolean bot, int size) {
         gameFrame = new GameFrame(size);
         this.start();
         ClientParser parser = new ClientParserJson(bot, size);
         output.println(parser.prepareGameConfig());
+    }
+    private void readInput() {
+        try { line = input.readLine(); }
+        catch (IOException e) {
+            System.out.println("Reading problem occurred.");
+        }
     }
 }

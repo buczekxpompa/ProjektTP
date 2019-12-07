@@ -7,7 +7,7 @@ import projectTP.weichi.server.support.Point;
 public class ServerParserJson implements ServerParser {
     private String parsedLine;
 
-    ServerParserJson(String line) {
+    public ServerParserJson(String line) {
         this.parsedLine = line;
     }
 
@@ -53,5 +53,27 @@ public class ServerParserJson implements ServerParser {
             }
         }
         return new GameConfig(bot, size);
+    }
+
+    @Override
+    public String parseMoveResponse(String response) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        String[] args = response.split("\"");
+        for(String arg : args) {
+            if(!arg.isEmpty()) {
+                String[] point = arg.split(",");
+                builder.append("{\"x\":\"")
+                        .append(point[0])
+                        .append("\",\"y\":\"")
+                        .append(point[1])
+                        .append("\",\"color\":\"")
+                        .append(point[2])
+                        .append("\"},");
+            }
+        }
+        builder.deleteCharAt(builder.toString().length()-1);
+        builder.append("]");
+        return builder.toString();
     }
 }

@@ -48,11 +48,11 @@ public class Game {
         for(int i = 0; i < boardSize; i++) {
             for(int j = 0; j < boardSize; j++){
                 if(stateChange[i][j] != fields[i][j]){
-                    output.append("\"(")
+                    output.append("\"")
                             .append(i)
                             .append(",")
                             .append(j)
-                            .append(")")
+                            .append(",")
                             .append(fields[i][j])
                             .append("\"");
                 }
@@ -66,16 +66,15 @@ public class Game {
 
     // ***** RULES ***** //
 
-    private void capture(Point point) {
-        //TODO: implement
-    }
-
-
     private boolean validateMove(Point point) {
         if(!occupied(point)) return false;
         if(!koViolation(point)) return false;
-        if(!dead(point)) return false;
+        if(!dead(point)) return false;  //karolowi chaiałem pokazac
         return true;
+    }
+
+    private void capture(Point point) {
+        //TODO: implement
     }
 
     private boolean dead(Point point) {
