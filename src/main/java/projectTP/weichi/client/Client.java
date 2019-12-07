@@ -52,11 +52,13 @@ public class Client extends Thread {
     }
 
     public void makeMove(int x, int y) {
-        //TODO: send to server in JSON
+        ClientParser parser = new ClientParserJson(x, y);
+        output.println(parser.prepareMove());
     }
     public void createGame(boolean bot, int size) {
         gameFrame = new GameFrame(size);
         this.start();
-        //TODO: send to server in JSON
+        ClientParser parser = new ClientParserJson(bot, size);
+        output.println(parser.prepareGameConfig());
     }
 }

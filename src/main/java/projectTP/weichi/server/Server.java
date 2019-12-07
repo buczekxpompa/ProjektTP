@@ -48,7 +48,8 @@ public class Server extends Thread {
     private void play() {
         do {
             readInput();
-            Point x = Parser.parsePoint(line);
+            ServerParser parser = new ServerParserJson(line);
+            Point x = parser.parsePoint();
             game.move(x);
         } while(!game.won());
     }
@@ -87,7 +88,8 @@ public class Server extends Thread {
 
     private Game createGame() {
         readInput();
-        GameConfig config= Parser.parseGameConfig();
+        ServerParser parser = new ServerParserJson(line);
+        GameConfig config = parser.parseGameConfig();
         return new Game(config.getBot(), config.getSize());
     }
 }
