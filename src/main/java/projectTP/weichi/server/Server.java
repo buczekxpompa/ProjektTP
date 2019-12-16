@@ -103,7 +103,9 @@ public class Server {
                     }
                 }
             }
-            return new Game(config.getBot(), config.getSize());
+            Game g = new Game(config.getBot(), config.getSize());
+            allGames.add(g);
+            return g;
         }
 
         private void play() {
