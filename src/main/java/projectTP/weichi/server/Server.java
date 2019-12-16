@@ -62,6 +62,7 @@ public class Server {
         private String line;
         private ServerParser parser = new ServerParserJson();
         private Game game;
+        private int timeout = 10;
 
         ServerThread(Socket socket) {
             try {
@@ -106,10 +107,10 @@ public class Server {
         }
 
         private void readInput() {
-            try { line = input.readLine(); }
-            catch (IOException e) {
-                System.out.println("Reading problem occurred.");
-            }
+            try {
+                line = input.readLine();
+                            }
+            catch (IOException ignored) {}
         }
 
     }

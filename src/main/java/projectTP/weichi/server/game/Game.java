@@ -2,6 +2,7 @@ package projectTP.weichi.server.game;
 
 import projectTP.weichi.server.support.Point;
 
+import java.nio.charset.Charset;
 import java.util.Random;
 
 
@@ -11,8 +12,7 @@ public class Game {
     boolean blackPassed = false;
     boolean whitePassed = false;
     boolean blacksTurn = true;
-    public int id;
-
+    public String id;
 
     Bot aiBot = null;
     int boardSize;
@@ -27,7 +27,18 @@ public class Game {
                 fields[i][j] = BoardField.EMPTY;
             }
         }
+        randomID();
+    }
 
+    private void randomID() {
+        byte[] bytes = new byte[10];
+        Random random = new Random();
+        random.nextBytes(bytes);
+        id = new String(bytes, Charset.defaultCharset());
+    }
+
+    public String getID() {
+        return id;
     }
 
     private void addBot() {
@@ -71,9 +82,7 @@ public class Game {
     // ***** RULES ***** //
 
     private boolean validateMove(Point point) {
-        if(!occupied(point)) return false;
-        if(!koViolation(point)) return false;
-        return dead(point);
+        return !(dead(point) || occupied(point) || koViolation(point));
     }
 
     private void capture(Point point) {
@@ -82,18 +91,18 @@ public class Game {
 
     private boolean dead(Point point) {
         //TODO: implement
-        return true;
+        return false;
     }
 
     private boolean koViolation(Point point) {
         //TODO: implement
-        return true;
+        return false;
     }
 
     private boolean occupied(Point point) {
         int x = point.getX();
         int y = point.getY();
-        return fields[x][y] == BoardField.EMPTY;
+        return fields[x][y] != BoardField.EMPTY;
     }
 
 

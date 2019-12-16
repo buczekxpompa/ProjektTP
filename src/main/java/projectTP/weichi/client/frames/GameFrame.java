@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 public class GameFrame extends JFrame implements Observable{
     private Observer observer;
+    private boolean blacksTurn = true;
+    private JLabel blacksTurnLabel = new JLabel("Turn: Black        ");
     private ArrayList<ButtonCoordinated> fields = new ArrayList<>();
 
     public GameFrame(int size) {
@@ -45,17 +47,19 @@ public class GameFrame extends JFrame implements Observable{
         }
 
         add(field);
+        add(blacksTurnLabel);
         add(new JButton("Pass") {
             @Override
             protected void fireActionPerformed(ActionEvent event) {
                 pass();
             }
         });
+
         setVisible(true);
     }
 
     private void pass() {
-
+        makeMove(new Point(-2,-2));
     }
 
     public void addObserver(Observer observer) {
@@ -71,19 +75,30 @@ public class GameFrame extends JFrame implements Observable{
     }
 
     public void updateState(ArrayList<ColoredPoint> changes) {
-        for(ColoredPoint change : changes) {
-            for(ButtonCoordinated field : fields) {
-                if(field.getCoordinateX() == change.getX() && field.getCoordinateY() == change.getY()) {
-                    switch (change.getColor()) {
-                        case EMPTY: field.changeColor(FieldColor.EMPTY);
-                            break;
-                        case BLACK: field.changeColor(FieldColor.BLACK);
-                            break;
-                        case WHITE: field.changeColor(FieldColor.WHITE);
-                            break;
+        if(changes.size() > 1) {
+            updateTurn();
+            for(ColoredPoint change : changes) {
+                for(ButtonCoordinated field : fields) {
+                    if(field.getCoordinateX() == change.getX() && field.getCoordinateY() == change.getY()) {
+                        switch (change.getColor()) {
+                            case EMPTY: field.changeColor(FieldColor.EMPTY);
+                                break;
+                            case BLACK: field.changeColor(FieldColor.BLACK);
+                                break;
+                            case WHITE: field.changeColor(FieldColor.WHITE);
+                                break;
+                        }
                     }
                 }
             }
         }
+    }
+
+    private void updateTurn() {
+        blacksTurn = !blacksTurn;
+        if(blacksTurn)
+            blacksTurnLabel.setText("Turn: Black        ");
+        else
+            blacksTurnLabel.setText("Turn: White        ");
     }
 }
