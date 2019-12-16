@@ -2,12 +2,15 @@ package projectTP.weichi.client;
 
 
 import projectTP.weichi.client.frames.GameFrame;
+import projectTP.weichi.client.frames.Lobby;
 import projectTP.weichi.client.frames.SizeFrame;
 import projectTP.weichi.client.observer.GameFrameObserver;
+import projectTP.weichi.client.observer.LobbyObserver;
 import projectTP.weichi.client.observer.SizeFrameObserver;
 import projectTP.weichi.client.parser.ClientParser;
 import projectTP.weichi.client.parser.ClientParserJson;
 import projectTP.weichi.server.support.ColoredPoint;
+import projectTP.weichi.server.support.GameConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,10 +29,17 @@ public class Client extends Thread {
 
     public Client() {
         connect();
-        startSizeFrame();
+        startLobby();
     }
 
-    private void startSizeFrame() {
+    private void startLobby() {
+        readInput();
+        Lobby lobby = new Lobby(parser.parseGames(line));
+        LobbyObserver lobbyObserver = new LobbyObserver(this);
+        lobby.addObserver(lobbyObserver);
+    }
+
+    public void startSizeFrame() {
         SizeFrame sizeFrame = new SizeFrame();
         SizeFrameObserver sizeFrameObserver = new SizeFrameObserver(this);
         sizeFrame.addObserver(sizeFrameObserver);
@@ -56,13 +66,18 @@ public class Client extends Thread {
 
     }
 
+    public void joinGame(String id) {
+        output.println(parser.prepareGameConfig(id));
+        readInput();
+        int size = parser.parseGameConfig(line);
+        gameFrame = new GameFrame(size);
+    }
     public void makeMove(int x, int y) {
         output.println(parser.prepareMove(x, y));
         readInput();
         ArrayList<ColoredPoint> changes = parser.parseResponse(line);
         gameFrame.updateState(changes);
     }
-
     public void createGame(boolean bot, int size) {
         gameFrame = new GameFrame(size);
         this.start();

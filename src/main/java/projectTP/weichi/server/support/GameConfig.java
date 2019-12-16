@@ -3,15 +3,18 @@ package projectTP.weichi.server.support;
 public class GameConfig {
     private boolean bot;
     private int size;
+    String id;
 
-    public GameConfig(boolean bot, int size) {
+    public GameConfig(boolean bot, int size, String id) {
         this.bot = bot;
         this.size = size;
+        this.id = id;
     }
 
     public GameConfig() {
         this.bot = false;
         this.size = 19;
+        this.id = "";
     }
 
     public int getSize() {
@@ -19,5 +22,8 @@ public class GameConfig {
     }
     public boolean getBot() {
         return bot;
+    }
+    public String getId() {
+        return id;
     }
 }
