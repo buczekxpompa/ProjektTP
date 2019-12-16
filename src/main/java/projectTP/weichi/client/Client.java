@@ -1,11 +1,13 @@
 package projectTP.weichi.client;
 
+
 import projectTP.weichi.client.frames.GameFrame;
 import projectTP.weichi.client.frames.SizeFrame;
 import projectTP.weichi.client.observer.GameFrameObserver;
 import projectTP.weichi.client.observer.SizeFrameObserver;
+import projectTP.weichi.client.parser.ClientParser;
+import projectTP.weichi.client.parser.ClientParserJson;
 import projectTP.weichi.server.support.ColoredPoint;
-import projectTP.weichi.server.support.Point;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,6 +22,7 @@ public class Client extends Thread {
     private PrintWriter output;
     private BufferedReader input;
     private GameFrame gameFrame;
+    private ClientParser parser = new ClientParserJson();
 
     public Client() {
         connect();
@@ -34,7 +37,6 @@ public class Client extends Thread {
 
     @Override
     public void run() {
-        //TODO: play
         GameFrameObserver gameFrameObserver = new GameFrameObserver(this);
         gameFrame.addObserver(gameFrameObserver);
 
@@ -55,8 +57,7 @@ public class Client extends Thread {
     }
 
     public void makeMove(int x, int y) {
-        ClientParser parser = new ClientParserJson(x, y);
-        output.println(parser.prepareMove());
+        output.println(parser.prepareMove(x, y));
         readInput();
         ArrayList<ColoredPoint> changes = parser.parseResponse(line);
         gameFrame.updateState(changes);
@@ -65,8 +66,7 @@ public class Client extends Thread {
     public void createGame(boolean bot, int size) {
         gameFrame = new GameFrame(size);
         this.start();
-        ClientParser parser = new ClientParserJson(bot, size);
-        output.println(parser.prepareGameConfig());
+        output.println(parser.prepareGameConfig(bot, size));
     }
     private void readInput() {
         try { line = input.readLine(); }

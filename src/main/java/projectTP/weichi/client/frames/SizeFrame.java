@@ -119,7 +119,7 @@ public class SizeFrame extends JFrame implements Observable {
 
 
             setVisible(true);
-            setDefaultCloseOperation(EXIT_ON_CLOSE); //tak bedzie
+            setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         }
 
     private void accept() {

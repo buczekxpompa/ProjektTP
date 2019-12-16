@@ -1,7 +1,5 @@
 package projectTP.weichi.client.frames;
 
-import projectTP.weichi.client.ButtonCoordinated;
-
 import projectTP.weichi.client.observer.Observable;
 import projectTP.weichi.client.observer.ObservableEvent;
 import projectTP.weichi.client.observer.Observer;
@@ -10,8 +8,6 @@ import projectTP.weichi.server.support.Point;
 
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -19,11 +15,13 @@ import java.util.ArrayList;
 
 public class GameFrame extends JFrame implements Observable{
     private Observer observer;
+    private boolean blacksTurn = true;
+    private JLabel blacksTurnLabel = new JLabel("Turn: Black        ");
     private ArrayList<ButtonCoordinated> fields = new ArrayList<>();
 
     public GameFrame(int size) {
         super();
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setBounds(10,10,size * 25 + 300,size * 25 + 60);
         JPanel field = new JPanel();
         setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -49,17 +47,19 @@ public class GameFrame extends JFrame implements Observable{
         }
 
         add(field);
+        add(blacksTurnLabel);
         add(new JButton("Pass") {
             @Override
             protected void fireActionPerformed(ActionEvent event) {
                 pass();
             }
         });
+
         setVisible(true);
     }
 
     private void pass() {
-
+        makeMove(new Point(-2,-2));
     }
 
     public void addObserver(Observer observer) {
@@ -75,19 +75,30 @@ public class GameFrame extends JFrame implements Observable{
     }
 
     public void updateState(ArrayList<ColoredPoint> changes) {
-        for(ColoredPoint change : changes) {
-            for(ButtonCoordinated field : fields) {
-                if(field.getCoordinateX() == change.getX() && field.getCoordinateY() == change.getY()) {
-                    switch (change.getColor()) {
-                        case EMPTY: field.changeColor(FieldColor.EMPTY);
-                            break;
-                        case BLACK: field.changeColor(FieldColor.BLACK);
-                            break;
-                        case WHITE: field.changeColor(FieldColor.WHITE);
-                            break;
+        if(changes.size() > 1) {
+            updateTurn();
+            for(ColoredPoint change : changes) {
+                for(ButtonCoordinated field : fields) {
+                    if(field.getCoordinateX() == change.getX() && field.getCoordinateY() == change.getY()) {
+                        switch (change.getColor()) {
+                            case EMPTY: field.changeColor(FieldColor.EMPTY);
+                                break;
+                            case BLACK: field.changeColor(FieldColor.BLACK);
+                                break;
+                            case WHITE: field.changeColor(FieldColor.WHITE);
+                                break;
+                        }
                     }
                 }
             }
         }
+    }
+
+    private void updateTurn() {
+        blacksTurn = !blacksTurn;
+        if(blacksTurn)
+            blacksTurnLabel.setText("Turn: Black        ");
+        else
+            blacksTurnLabel.setText("Turn: White        ");
     }
 }

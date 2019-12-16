@@ -3,6 +3,8 @@ package projectTP.weichi;
 
 
 import org.junit.Test;
+import projectTP.weichi.client.Client;
+import projectTP.weichi.server.Server;
 
 import static org.junit.Assert.assertTrue;
 
@@ -15,9 +17,9 @@ public class AppTest
     /**
      * Rigorous Test :-)
      */
-    @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
+    public static void main( String[] args ) {
+        new Server();
     }
+
+
 }
