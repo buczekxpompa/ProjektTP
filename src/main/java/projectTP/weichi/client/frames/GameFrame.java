@@ -1,7 +1,5 @@
 package projectTP.weichi.client.frames;
 
-import projectTP.weichi.client.ButtonCoordinated;
-
 import projectTP.weichi.client.observer.Observable;
 import projectTP.weichi.client.observer.ObservableEvent;
 import projectTP.weichi.client.observer.Observer;
@@ -10,8 +8,6 @@ import projectTP.weichi.server.support.Point;
 
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -23,7 +19,7 @@ public class GameFrame extends JFrame implements Observable{
 
     public GameFrame(int size) {
         super();
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setBounds(10,10,size * 25 + 300,size * 25 + 60);
         JPanel field = new JPanel();
         setLayout(new FlowLayout(FlowLayout.CENTER));

@@ -2,6 +2,8 @@ package projectTP.weichi.server.game;
 
 import projectTP.weichi.server.support.Point;
 
+import java.util.Random;
+
 
 public class Game {
     BoardField[][] fields;
@@ -9,6 +11,7 @@ public class Game {
     boolean blackPassed = false;
     boolean whitePassed = false;
     boolean blacksTurn = true;
+    public int id;
 
 
     Bot aiBot = null;
@@ -24,6 +27,7 @@ public class Game {
                 fields[i][j] = BoardField.EMPTY;
             }
         }
+
     }
 
     private void addBot() {
@@ -69,8 +73,7 @@ public class Game {
     private boolean validateMove(Point point) {
         if(!occupied(point)) return false;
         if(!koViolation(point)) return false;
-        if(!dead(point)) return false;  //karolowi chaiałem pokazac
-        return true;
+        return dead(point);
     }
 
     private void capture(Point point) {

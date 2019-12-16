@@ -1,4 +1,4 @@
-package projectTP.weichi.client;
+package projectTP.weichi.client.frames;
 
 import projectTP.weichi.client.frames.FieldColor;
 

@@ -1,4 +1,4 @@
-package projectTP.weichi.server;
+package projectTP.weichi.server.parser;
 
 import projectTP.weichi.server.support.GameConfig;
 import projectTP.weichi.server.support.Point;
@@ -7,7 +7,7 @@ import projectTP.weichi.server.support.Point;
 public class ServerParserJson implements ServerParser {
     private String parsedLine;
 
-    public ServerParserJson(String line) {
+    public void setLine(String line) {
         this.parsedLine = line;
     }
 

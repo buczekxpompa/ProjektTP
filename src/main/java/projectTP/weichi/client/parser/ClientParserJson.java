@@ -1,47 +1,28 @@
-package projectTP.weichi.client;
+package projectTP.weichi.client.parser;
 
 import projectTP.weichi.server.game.BoardField;
 import projectTP.weichi.server.support.ColoredPoint;
-import projectTP.weichi.server.support.Point;
 
 import java.util.ArrayList;
 
 public class ClientParserJson implements ClientParser{
-    int x = -1;
-    int y = -1;
-    boolean bot = false;
-    int size = -1;
 
-    ClientParserJson(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-    ClientParserJson(boolean bot, int size) {
-        this.bot = bot;
-        this.size = size;
-    }
     @Override
-    public String prepareMove() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{\"type\":\"move\",\"x\":\"" );
-        builder.append(x);
-        builder.append("\",\"y\":\"");
-        builder.append(y);
-        builder.append("\"}");
-        System.out.println(builder.toString());
-        return builder.toString();
+    public String prepareMove(int x, int y) {
+        return "{\"type\":\"move\",\"x\":\"" +
+                x +
+                "\",\"y\":\"" +
+                y +
+                "\"}";
     }
 
     @Override
-    public String prepareGameConfig() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{\"type\":\"gameConfig\",\"bot\":\"" );
-        builder.append(bot);
-        builder.append("\",\"size\":\"");
-        builder.append(size);
-        builder.append("\"}");
-        System.out.println(builder.toString());
-        return builder.toString();
+    public String prepareGameConfig(boolean bot, int size) {
+        return "{\"type\":\"gameConfig\",\"bot\":\"" +
+                bot +
+                "\",\"size\":\"" +
+                size +
+                "\"}";
     }
 
     @Override
