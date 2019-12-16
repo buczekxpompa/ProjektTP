@@ -13,9 +13,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Server {
     private ServerSocket server;
+    private ArrayList<Game> allGames = new ArrayList<>();
 
     public Server() {
         try {
@@ -62,7 +64,6 @@ public class Server {
         private String line;
         private ServerParser parser = new ServerParserJson();
         private Game game;
-        private int timeout = 10;
 
         ServerThread(Socket socket) {
             try {
@@ -83,16 +84,25 @@ public class Server {
 
         @Override
         public void run() {
-
-            game = createGame();
-            play();
-            // rematch?
+            output.println(parser.prepareGames(allGames));
+            while (true){
+                game = createGame();
+                play();
+            }
         }
 
         private Game createGame() {
             readInput();
             parser.setLine(line);
             GameConfig config = parser.parseGameConfig();
+            if(!config.getId().equals("")) {
+                for (Game x : allGames) {
+                    if(config.getId().equals(x.getID())) {
+                        output.println(parser.prepareGameConfig(x.getSize()));
+                        return x;
+                    }
+                }
+            }
             return new Game(config.getBot(), config.getSize());
         }
 

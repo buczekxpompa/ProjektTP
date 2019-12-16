@@ -41,8 +41,16 @@ public class Game {
         return id;
     }
 
+    public boolean getBot() {
+        return aiBot != null;
+    }
+
     private void addBot() {
         aiBot = new Bot();
+    }
+
+    public int getSize() {
+        return boardSize;
     }
 
     public boolean won() {
@@ -50,6 +58,7 @@ public class Game {
     }
     public String move(Point point) {
         StringBuilder output = new StringBuilder();
+        if(point.getX() == -2 && point.getY() == -2) return pass();
         if(!validateMove(point)) return output.toString();
 
         for(int i = 0; i < boardSize; i++) {
@@ -76,6 +85,13 @@ public class Game {
 
         blacksTurn = !blacksTurn;
         return output.toString();
+    }
+
+    private String pass() {
+        if(blacksTurn) blackPassed = true;
+        else whitePassed = true;
+        blacksTurn = !blacksTurn;
+        return "pass";
     }
 
 

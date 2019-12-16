@@ -1,7 +1,11 @@
 package projectTP.weichi.server.parser;
 
+import projectTP.weichi.server.game.Game;
 import projectTP.weichi.server.support.GameConfig;
 import projectTP.weichi.server.support.Point;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 // make it singleton?
 public class ServerParserJson implements ServerParser {
@@ -37,6 +41,7 @@ public class ServerParserJson implements ServerParser {
     public GameConfig parseGameConfig() {
         boolean bot = true;
         int size = -1;
+        String id = "";
         String[] args = parsedLine.split("\"");
         for(int i = 0; i < args.length; i++) {
             if(args[i].contentEquals("bot")) {
@@ -51,8 +56,11 @@ public class ServerParserJson implements ServerParser {
                     e.printStackTrace();
                 }
             }
+            if(args[i].contentEquals("id")) {
+                id = args[i+2];
+            }
         }
-        return new GameConfig(bot, size);
+        return new GameConfig(bot, size, id);
     }
 
     @Override
@@ -61,6 +69,9 @@ public class ServerParserJson implements ServerParser {
         builder.append("[");
         String[] args = response.split("\"");
         for(String arg : args) {
+            if(arg.equals("pass")){
+                return "{\"pass\":1}";
+            }
             if(!arg.isEmpty()) {
                 String[] point = arg.split(",");
                 builder.append("{\"x\":\"")
@@ -75,5 +86,28 @@ public class ServerParserJson implements ServerParser {
         builder.deleteCharAt(builder.toString().length()-1);
         builder.append("]");
         return builder.toString();
+    }
+
+    @Override
+    public String prepareGameConfig(int size) {
+        return "{\"size\": +" +
+                size +
+                "}";
+    }
+
+    @Override
+    public String prepareGames(ArrayList<Game> games) {
+        StringBuilder out = new StringBuilder("[");
+        for(Game game : games) {
+            if(!game.getBot()) {
+                out.append("{\"id\":\"")
+                        .append(game.getID())
+                        .append("\"},");
+            }
+        }
+        if(out.lastIndexOf(",") != -1) out.deleteCharAt(out.lastIndexOf(","));
+        out.append("]");
+        System.out.println(out.toString());
+        return out.toString();
     }
 }

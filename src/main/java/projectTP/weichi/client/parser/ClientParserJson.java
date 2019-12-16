@@ -2,6 +2,7 @@ package projectTP.weichi.client.parser;
 
 import projectTP.weichi.server.game.BoardField;
 import projectTP.weichi.server.support.ColoredPoint;
+import projectTP.weichi.server.support.GameConfig;
 
 import java.util.ArrayList;
 
@@ -61,6 +62,42 @@ public class ClientParserJson implements ClientParser{
             output.add(new ColoredPoint(x, y , color));
         }
 
+        return output;
+    }
+
+    @Override
+    public String prepareGameConfig(String id) {
+        return  "{\"type\":\"gameConfig\",\"id\":\"" +
+                id +
+                "\"}";
+    }
+
+    @Override
+    public int parseGameConfig(String line) {
+        int out = 0;
+        String[] args = line.split("\"");
+        for(int i = 0; i < args.length; i++ ) {
+            if(args[i].equals("size")) {
+                try { out = Integer.parseInt(args[i+2]); }
+                catch (NumberFormatException ignored) {}
+            }
+        }
+        return out;
+    }
+
+    @Override
+    public ArrayList<String> parseGames(String line) {
+        ArrayList<String> output = new ArrayList<>();
+        String[] objs = line.split(",");
+        for( String obj : objs) {
+            String[] args = obj.split("\"");
+            for(int i = 0; i < args.length; i++) {
+                if(args[i].equals("id")) {
+                    output.add(args[i+2]);
+                }
+            }
+        }
+        System.out.println(output);
         return output;
     }
 

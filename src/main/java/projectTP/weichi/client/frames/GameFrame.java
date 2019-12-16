@@ -17,6 +17,7 @@ public class GameFrame extends JFrame implements Observable{
     private Observer observer;
     private boolean blacksTurn = true;
     private JLabel blacksTurnLabel = new JLabel("Turn: Black        ");
+    private JLabel passed = new JLabel("                          ");
     private ArrayList<ButtonCoordinated> fields = new ArrayList<>();
 
     public GameFrame(int size) {
@@ -60,6 +61,9 @@ public class GameFrame extends JFrame implements Observable{
 
     private void pass() {
         makeMove(new Point(-2,-2));
+        updateTurn();
+        if(blacksTurn) passed.setText("White has passed!         ");
+        else passed.setText("Black has passed!         ");
     }
 
     public void addObserver(Observer observer) {
@@ -75,6 +79,7 @@ public class GameFrame extends JFrame implements Observable{
     }
 
     public void updateState(ArrayList<ColoredPoint> changes) {
+        System.out.println(changes);
         if(changes.size() > 1) {
             updateTurn();
             for(ColoredPoint change : changes) {
