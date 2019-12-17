@@ -25,12 +25,6 @@ public class Lobby extends JFrame implements Observable {
                 dispose();
             }
         });
-        add(new JButton("Refresh") {
-            @Override
-            protected void fireActionPerformed(ActionEvent event) {
-                observer.onEvent(new ObservableEvent("-1"));
-            }
-        });
         for(final String game : games) {
             JPanel panel = new JPanel();
             panel.setLayout(new FlowLayout());

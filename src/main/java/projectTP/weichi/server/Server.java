@@ -67,6 +67,7 @@ public class Server {
         private ServerParser parser = new ServerParserJson();
         private Game game;
         private boolean join;
+        CombinedGame sharedGame;
 
         ServerThread(Socket socket) {
             try {
@@ -88,23 +89,26 @@ public class Server {
         @Override
         public void run() {
             output.println(parser.prepareGames(allGames));
-            while (true){
-                game = createGame();
-                if(join)
-                    playJoin();
-                else
-                    playBot();
-            }
+            game = createGame();
+            if(join)
+                playJoin();
+            else
+                playBot();
         }
 
         private void playJoin() {
+            boolean first = true;
             do {
                 readInput();
+                if(sharedGame != null && first) {
+                    allGames.remove(sharedGame);
+                }
                 parser.setLine(line);
                 Point x = parser.parsePoint();
                 String response = parser.parseMoveResponse(game.move(x));
                 output.println(response);
                 player2.println(response);
+                first = false;
             } while(!game.won());
         }
 
@@ -140,7 +144,8 @@ public class Server {
             output.println(g.getID());
 
             if(!g.getBot()) {
-                allGames.add(new CombinedGame(g, this));
+                sharedGame = new CombinedGame(g, this);
+                allGames.add(sharedGame);
                 join = true;
             } else join = false;
             return g;

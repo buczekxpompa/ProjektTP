@@ -62,7 +62,7 @@ public class Client {
         output.println(parser.prepareGameConfig(id));
         readInput();
         int size = parser.parseGameConfig(line);
-        gameFrame = new GameFrame(size, "BLACK", id);
+        gameFrame = new GameFrame(size, "WHITE", id);
         gameFrame.addObserver( new GameFrameObserver(this));
         Thread thread = new Thread() {
             @Override
