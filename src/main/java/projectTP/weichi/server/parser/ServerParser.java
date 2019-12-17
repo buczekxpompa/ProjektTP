@@ -14,4 +14,5 @@ public interface ServerParser {
     String parseMoveResponse(String response);
     String prepareGameConfig(int size);
     String prepareGames(ArrayList<CombinedGame> games);
+    String parseWinner();
 }

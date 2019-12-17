@@ -109,4 +109,11 @@ public class ServerParserJson implements ServerParser {
         System.out.println(out.toString());
         return out.toString();
     }
+
+    @Override
+    public String parseWinner() {
+        return "{\"winner\":\"" +
+                parsedLine +
+                "\"}";
+    }
 }

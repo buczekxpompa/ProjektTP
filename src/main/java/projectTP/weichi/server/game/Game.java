@@ -36,7 +36,6 @@ public class Game {
     }
 
     private void randomID() {
-        //TODO: fix IDs
         Random random = new Random();
         for(int i = 0; i < 10; i++)
             id += String.valueOf(random.nextInt(9));
@@ -126,11 +125,13 @@ public class Game {
         return fields[x][y] != BoardField.EMPTY;
     }
 
-    public boolean blackWon() {
-        return countTerritory(BoardField.BLACK) > countTerritory(BoardField.WHITE);
-    }
-
     private int countTerritory(BoardField bField) {
         return 0;
+    }
+
+    public String countWinner() {
+        if(countTerritory(BoardField.WHITE) > countTerritory(BoardField.BLACK)) return "White";
+        if(countTerritory(BoardField.WHITE) < countTerritory(BoardField.BLACK)) return "Black";
+        return "draw";
     }
 }

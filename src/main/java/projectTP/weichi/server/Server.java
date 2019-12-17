@@ -110,6 +110,9 @@ public class Server {
                 player2.println(response);
                 first = false;
             } while(!game.won());
+            String winner = game.countWinner();
+            parser.setLine(winner);
+            output.println(parser.parseWinner());
         }
 
         private void playBot() {
