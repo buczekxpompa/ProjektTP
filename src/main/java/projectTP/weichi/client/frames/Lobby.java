@@ -22,6 +22,13 @@ public class Lobby extends JFrame implements Observable {
             @Override
             protected void fireActionPerformed(ActionEvent event) {
                 observer.onEvent(new ObservableEvent("0"));
+                dispose();
+            }
+        });
+        add(new JButton("Refresh") {
+            @Override
+            protected void fireActionPerformed(ActionEvent event) {
+                observer.onEvent(new ObservableEvent("-1"));
             }
         });
         for(final String game : games) {
@@ -32,6 +39,7 @@ public class Lobby extends JFrame implements Observable {
                 @Override
                 protected void fireActionPerformed(ActionEvent event) {
                    observer.onEvent(new ObservableEvent(game));
+                   dispose();
                 }
             });
             panel.setVisible(true);

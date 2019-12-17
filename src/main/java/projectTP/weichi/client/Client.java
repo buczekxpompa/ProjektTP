@@ -19,8 +19,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import static java.lang.Thread.sleep;
-
 public class Client {
     private boolean reading = false;
     private String line;
@@ -34,7 +32,7 @@ public class Client {
         startLobby();
     }
 
-    private void startLobby() {
+    public void startLobby() {
         readInput();
         Lobby lobby = new Lobby(parser.parseGames(line));
         LobbyObserver lobbyObserver = new LobbyObserver(this);
@@ -64,29 +62,53 @@ public class Client {
         output.println(parser.prepareGameConfig(id));
         readInput();
         int size = parser.parseGameConfig(line);
-        gameFrame = new GameFrame(size, "WHITE");
-        GameFrameObserver gameFrameObserver = new GameFrameObserver(this);
-        gameFrame.addObserver(gameFrameObserver);
-        offset();
-        readInput();
-        ArrayList<ColoredPoint> changes = parser.parseResponse(line);
-        gameFrame.updateState(changes);
+        gameFrame = new GameFrame(size, "BLACK", id);
+        gameFrame.addObserver( new GameFrameObserver(this));
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                readInput();
+                ArrayList<ColoredPoint> changes = parser.parseResponse(line);
+                gameFrame.updateState(changes);
+            }
+        };
+        thread.start();
     }
-    public void makeMove(int x, int y) {
-        output.println(parser.prepareMove(x, y));
-        readInput();
-        ArrayList<ColoredPoint> changes = parser.parseResponse(line);
-        gameFrame.updateState(changes);
-        offset();
-        readInput();
-        changes = parser.parseResponse(line);
-        gameFrame.updateState(changes);
+    public void makeMove(final int x, final int y) {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                ArrayList<ColoredPoint> changes;
+                output.println(parser.prepareMove(x, y));
+                readInput();
+                changes = parser.parseResponse(line);
+                if(gameFrame.updateState(changes)) {
+                    gameFrame.revalidate();
+                    do {
+                        readInput();
+                        changes = parser.parseResponse(line);
+                    } while(!gameFrame.updateState(changes));
+                    gameFrame.revalidate();
+                }
+            }
+
+        };
+        thread.start();
     }
-    public void createGame(boolean bot, int size) {
-        gameFrame = new GameFrame(size, "BLACK");
-        GameFrameObserver gameFrameObserver = new GameFrameObserver(this);
-        gameFrame.addObserver(gameFrameObserver);
+    public void createGame(final boolean bot, int size) {
         output.println(parser.prepareGameConfig(bot, size));
+        readInput();
+        gameFrame = new GameFrame(size, "BLACK", line);
+        gameFrame.addObserver( new GameFrameObserver(this));
+        if (!bot) {
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    readInput();
+                }
+            };
+            thread.start();
+        }
     }
     private void readInput() {
         System.out.println("waiting for input");
@@ -101,13 +123,5 @@ public class Client {
 
     public boolean isReading() {
         return reading;
-    }
-
-    private void offset() {
-        for(int i = 0; i < 1000000; i++) {
-            int a = 10;
-            int b = 20;
-            int c = b/a;
-        }
     }
 }

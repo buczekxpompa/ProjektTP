@@ -20,8 +20,8 @@ public class GameFrame extends JFrame implements Observable{
     private JLabel passed = new JLabel("                          ");
     private ArrayList<ButtonCoordinated> fields = new ArrayList<>();
 
-    public GameFrame(int size, String player) {
-        super();
+    public GameFrame(int size, String player, String id) {
+        super(id);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setBounds(10,10,size * 25 + 300,size * 25 + 60);
         JPanel field = new JPanel();
@@ -78,10 +78,11 @@ public class GameFrame extends JFrame implements Observable{
         observer.onEvent(new ObservableEvent(point.getX(), point.getY()));
     }
 
-    public void updateState(ArrayList<ColoredPoint> changes) {
+    public boolean updateState(ArrayList<ColoredPoint> changes) {
         if(changes.size() > 1) {
             updateTurn();
             for(ColoredPoint change : changes) {
+                if(change.getY() == -2 && change.getX() == -2) return true;
                 for(ButtonCoordinated field : fields) {
                     if(field.getCoordinateX() == change.getX() && field.getCoordinateY() == change.getY()) {
                         switch (change.getColor()) {
@@ -95,7 +96,9 @@ public class GameFrame extends JFrame implements Observable{
                     }
                 }
             }
+            return true;
         }
+        return false;
     }
 
     private void updateTurn() {

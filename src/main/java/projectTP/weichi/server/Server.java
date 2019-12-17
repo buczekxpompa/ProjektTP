@@ -130,12 +130,14 @@ public class Server {
                         player2 = x.getPlayer().getOutput();
                         x.getPlayer().setPlayer2(output);
                         join = true;
+                        player2.println("gotow");
                         return x.getGame();
                     }
                 }
             }
 
             Game g = new Game(config.getBot(), config.getSize());
+            output.println(g.getID());
 
             if(!g.getBot()) {
                 allGames.add(new CombinedGame(g, this));

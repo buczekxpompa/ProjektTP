@@ -58,6 +58,9 @@ public class ClientParserJson implements ClientParser{
                             break;
                         case "EMPTY": color = BoardField.EMPTY;
                     }
+                } else if(point[i].contentEquals("pass")) {
+                    output.add(new ColoredPoint(-2, -2, BoardField.BLACK));
+                    output.add(new ColoredPoint(-2, -2, BoardField.WHITE));
                 }
             }
             output.add(new ColoredPoint(x, y , color));
