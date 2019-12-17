@@ -90,9 +90,9 @@ public class ServerParserJson implements ServerParser {
 
     @Override
     public String prepareGameConfig(int size) {
-        return "{\"size\": +" +
+        return "{\"size\":\"" +
                 size +
-                "}";
+                "\"}";
     }
 
     @Override

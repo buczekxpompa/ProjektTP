@@ -20,7 +20,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-public class Client extends Thread {
+public class Client {
     private String line;
     private PrintWriter output;
     private BufferedReader input;
@@ -45,7 +45,7 @@ public class Client extends Thread {
         sizeFrame.addObserver(sizeFrameObserver);
     }
 
-    @Override
+
     public void run() {
         GameFrameObserver gameFrameObserver = new GameFrameObserver(this);
         gameFrame.addObserver(gameFrameObserver);
@@ -71,6 +71,8 @@ public class Client extends Thread {
         readInput();
         int size = parser.parseGameConfig(line);
         gameFrame = new GameFrame(size);
+        GameFrameObserver gameFrameObserver = new GameFrameObserver(this);
+        gameFrame.addObserver(gameFrameObserver);
     }
     public void makeMove(int x, int y) {
         output.println(parser.prepareMove(x, y));
@@ -80,7 +82,8 @@ public class Client extends Thread {
     }
     public void createGame(boolean bot, int size) {
         gameFrame = new GameFrame(size);
-        this.start();
+        GameFrameObserver gameFrameObserver = new GameFrameObserver(this);
+        gameFrame.addObserver(gameFrameObserver);
         output.println(parser.prepareGameConfig(bot, size));
     }
     private void readInput() {
