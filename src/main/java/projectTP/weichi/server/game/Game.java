@@ -108,15 +108,18 @@ public class Game {
 
     private void capture(Point point) {
         //TODO: implement
+        fields[point.getX()][point.getY()] = BoardField.EMPTY;
     }
 
     private boolean dead(Point point) {
         //TODO: implement
+        fields[point.getX()][point.getY()] = BoardField.EMPTY;
         return false;
     }
 
     private boolean koViolation(Point point) {
         //TODO: implement
+        System.out.println("Forbidden move");
         return false;
     }
 
