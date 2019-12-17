@@ -20,7 +20,7 @@ public class GameFrame extends JFrame implements Observable{
     private JLabel passed = new JLabel("                          ");
     private ArrayList<ButtonCoordinated> fields = new ArrayList<>();
 
-    public GameFrame(int size) {
+    public GameFrame(int size, String player) {
         super();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setBounds(10,10,size * 25 + 300,size * 25 + 60);
@@ -46,7 +46,7 @@ public class GameFrame extends JFrame implements Observable{
                 field.add(button);
             }
         }
-
+        add(new JLabel("Player:  " + player + "       "));
         add(field);
         add(blacksTurnLabel);
         add(new JButton("Pass") {
@@ -79,7 +79,6 @@ public class GameFrame extends JFrame implements Observable{
     }
 
     public void updateState(ArrayList<ColoredPoint> changes) {
-        System.out.println(changes);
         if(changes.size() > 1) {
             updateTurn();
             for(ColoredPoint change : changes) {

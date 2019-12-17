@@ -10,7 +10,6 @@ import projectTP.weichi.client.observer.SizeFrameObserver;
 import projectTP.weichi.client.parser.ClientParser;
 import projectTP.weichi.client.parser.ClientParserJson;
 import projectTP.weichi.server.support.ColoredPoint;
-import projectTP.weichi.server.support.GameConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +19,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
 public class Client {
+    private boolean reading = false;
     private String line;
     private PrintWriter output;
     private BufferedReader input;
@@ -45,14 +47,6 @@ public class Client {
         sizeFrame.addObserver(sizeFrameObserver);
     }
 
-
-    public void run() {
-        GameFrameObserver gameFrameObserver = new GameFrameObserver(this);
-        gameFrame.addObserver(gameFrameObserver);
-
-        // rematch?
-    }
-
     private void connect() {
         try {
             Socket socket = new Socket("localhost", 4999);
@@ -70,26 +64,50 @@ public class Client {
         output.println(parser.prepareGameConfig(id));
         readInput();
         int size = parser.parseGameConfig(line);
-        gameFrame = new GameFrame(size);
+        gameFrame = new GameFrame(size, "WHITE");
         GameFrameObserver gameFrameObserver = new GameFrameObserver(this);
         gameFrame.addObserver(gameFrameObserver);
+        offset();
+        readInput();
+        ArrayList<ColoredPoint> changes = parser.parseResponse(line);
+        gameFrame.updateState(changes);
     }
     public void makeMove(int x, int y) {
         output.println(parser.prepareMove(x, y));
         readInput();
         ArrayList<ColoredPoint> changes = parser.parseResponse(line);
         gameFrame.updateState(changes);
+        offset();
+        readInput();
+        changes = parser.parseResponse(line);
+        gameFrame.updateState(changes);
     }
     public void createGame(boolean bot, int size) {
-        gameFrame = new GameFrame(size);
+        gameFrame = new GameFrame(size, "BLACK");
         GameFrameObserver gameFrameObserver = new GameFrameObserver(this);
         gameFrame.addObserver(gameFrameObserver);
         output.println(parser.prepareGameConfig(bot, size));
     }
     private void readInput() {
+        System.out.println("waiting for input");
+        reading = true;
         try { line = input.readLine(); }
         catch (IOException e) {
             System.out.println("Reading problem occurred.");
+        }
+        reading = false;
+        System.out.println("got it \n");
+    }
+
+    public boolean isReading() {
+        return reading;
+    }
+
+    private void offset() {
+        for(int i = 0; i < 1000000; i++) {
+            int a = 10;
+            int b = 20;
+            int c = b/a;
         }
     }
 }

@@ -12,7 +12,7 @@ public class Game {
     boolean blackPassed = false;
     boolean whitePassed = false;
     boolean blacksTurn = true;
-    public String id;
+    public String id = "";
 
     Bot aiBot = null;
     int boardSize;
@@ -36,10 +36,10 @@ public class Game {
     }
 
     private void randomID() {
-        byte[] bytes = new byte[10];
+        //TODO: fix IDs
         Random random = new Random();
-        random.nextBytes(bytes);
-        id = new String(bytes, Charset.defaultCharset());
+        for(int i = 0; i < 10; i++)
+            id += String.valueOf(random.nextInt(9));
     }
 
     public String getID() {
@@ -126,5 +126,11 @@ public class Game {
         return fields[x][y] != BoardField.EMPTY;
     }
 
+    public boolean blackWon() {
+        return countTerritory(BoardField.BLACK) > countTerritory(BoardField.WHITE);
+    }
 
+    private int countTerritory(BoardField bField) {
+        return 0;
+    }
 }

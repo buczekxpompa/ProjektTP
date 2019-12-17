@@ -28,6 +28,7 @@ public class ClientParserJson implements ClientParser{
 
     @Override
     public ArrayList<ColoredPoint> parseResponse(String line) {
+        System.out.println(line);
         ArrayList<ColoredPoint> output = new ArrayList<>();
         String[] args = line.split("}");
         for(String arg: args) {
@@ -97,7 +98,7 @@ public class ClientParserJson implements ClientParser{
                 }
             }
         }
-        System.out.println(output);
+        System.out.println(line);
         return output;
     }
 

@@ -4,6 +4,7 @@ import projectTP.weichi.server.exceptions.*;
 import projectTP.weichi.server.game.Game;
 import projectTP.weichi.server.parser.ServerParser;
 import projectTP.weichi.server.parser.ServerParserJson;
+import projectTP.weichi.server.support.CombinedGame;
 import projectTP.weichi.server.support.GameConfig;
 import projectTP.weichi.server.support.Point;
 
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 
 public class Server {
     private ServerSocket server;
-    private ArrayList<Game> allGames = new ArrayList<>();
+    private ArrayList<CombinedGame> allGames = new ArrayList<>();
 
     public Server() {
         try {
@@ -58,12 +59,14 @@ public class Server {
     }
 
 
-    class ServerThread extends Thread {
+    public class ServerThread extends Thread {
         private BufferedReader input;
         private PrintWriter output;
+        private PrintWriter player2;
         private String line;
         private ServerParser parser = new ServerParserJson();
         private Game game;
+        private boolean join;
 
         ServerThread(Socket socket) {
             try {
@@ -87,28 +90,25 @@ public class Server {
             output.println(parser.prepareGames(allGames));
             while (true){
                 game = createGame();
-                play();
+                if(join)
+                    playJoin();
+                else
+                    playBot();
             }
         }
 
-        private Game createGame() {
-            readInput();
-            parser.setLine(line);
-            GameConfig config = parser.parseGameConfig();
-            if(!config.getId().equals("")) {
-                for (Game x : allGames) {
-                    if(config.getId().equals(x.getID())) {
-                        output.println(parser.prepareGameConfig(x.getSize()));
-                        return x;
-                    }
-                }
-            }
-            Game g = new Game(config.getBot(), config.getSize());
-            allGames.add(g);
-            return g;
+        private void playJoin() {
+            do {
+                readInput();
+                parser.setLine(line);
+                Point x = parser.parsePoint();
+                String response = parser.parseMoveResponse(game.move(x));
+                output.println(response);
+                player2.println(response);
+            } while(!game.won());
         }
 
-        private void play() {
+        private void playBot() {
             do {
                 readInput();
                 parser.setLine(line);
@@ -116,6 +116,40 @@ public class Server {
                 String response = parser.parseMoveResponse(game.move(x));
                 output.println(response);
             } while(!game.won());
+        }
+
+        private Game createGame() {
+            readInput();
+            parser.setLine(line);
+            GameConfig config = parser.parseGameConfig();
+
+            if(!config.getId().equals("")) {
+                for (CombinedGame x : allGames) {
+                    if(config.getId().equals(x.getGame().getID())) {
+                        output.println(parser.prepareGameConfig(x.getGame().getSize()));
+                        player2 = x.getPlayer().getOutput();
+                        x.getPlayer().setPlayer2(output);
+                        join = true;
+                        return x.getGame();
+                    }
+                }
+            }
+
+            Game g = new Game(config.getBot(), config.getSize());
+
+            if(!g.getBot()) {
+                allGames.add(new CombinedGame(g, this));
+                join = true;
+            } else join = false;
+            return g;
+        }
+
+        private PrintWriter getOutput() {
+            return output;
+        }
+
+        public void setPlayer2(PrintWriter player2) {
+            this.player2 = player2;
         }
 
         private void readInput() {

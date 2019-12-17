@@ -27,7 +27,7 @@ public class Lobby extends JFrame implements Observable {
         for(final String game : games) {
             JPanel panel = new JPanel();
             panel.setLayout(new FlowLayout());
-            panel.add(new JLabel(game));
+            panel.add(new JLabel(game + "             "));
             panel.add(new JButton("Join"){
                 @Override
                 protected void fireActionPerformed(ActionEvent event) {
