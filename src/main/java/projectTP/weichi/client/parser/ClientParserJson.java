@@ -28,6 +28,7 @@ public class ClientParserJson implements ClientParser{
 
     @Override
     public ArrayList<ColoredPoint> parseResponse(String line) {
+        System.out.println(line);
         ArrayList<ColoredPoint> output = new ArrayList<>();
         String[] args = line.split("}");
         for(String arg: args) {
@@ -56,6 +57,20 @@ public class ClientParserJson implements ClientParser{
                         case "WHITE": color = BoardField.WHITE;
                             break;
                         case "EMPTY": color = BoardField.EMPTY;
+                    }
+                } else if(point[i].contentEquals("pass")) {
+                    output.add(new ColoredPoint(-2, -2, BoardField.BLACK));
+                    output.add(new ColoredPoint(-2, -2, BoardField.WHITE));
+                } else if(point[i].contentEquals("winner")) {
+                    switch(point[i+2]) {
+                        case "White": output.add(new ColoredPoint(-3, -3, BoardField.WHITE));
+                            output.add(new ColoredPoint(-3, -3, BoardField.WHITE));
+                            break;
+                        case "Black": output.add(new ColoredPoint(-3, -3, BoardField.BLACK));
+                            output.add(new ColoredPoint(-3, -3, BoardField.BLACK));
+                            break;
+                        default: output.add(new ColoredPoint(-3, -3, BoardField.EMPTY));
+                            output.add(new ColoredPoint(-3, -3, BoardField.EMPTY));
                     }
                 }
             }
@@ -97,7 +112,7 @@ public class ClientParserJson implements ClientParser{
                 }
             }
         }
-        System.out.println(output);
+        System.out.println(line);
         return output;
     }
 

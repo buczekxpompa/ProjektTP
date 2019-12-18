@@ -2,7 +2,6 @@ package projectTP.weichi.server.game;
 
 import projectTP.weichi.server.support.Point;
 
-import java.nio.charset.Charset;
 import java.util.Random;
 
 
@@ -12,7 +11,7 @@ public class Game {
     boolean blackPassed = false;
     boolean whitePassed = false;
     boolean blacksTurn = true;
-    public String id;
+    public String id = "";
 
     Bot aiBot = null;
     int boardSize;
@@ -36,10 +35,9 @@ public class Game {
     }
 
     private void randomID() {
-        byte[] bytes = new byte[10];
         Random random = new Random();
-        random.nextBytes(bytes);
-        id = new String(bytes, Charset.defaultCharset());
+        for(int i = 0; i < 10; i++)
+            id += String.valueOf(random.nextInt(9));
     }
 
     public String getID() {
@@ -66,6 +64,7 @@ public class Game {
         if(point.getX() == -2 && point.getY() == -2) return pass();
         if(!validateMove(point)) return output.toString();
 
+        unPass();
         for(int i = 0; i < boardSize; i++) {
             System.arraycopy(fields[i], 0, stateChange[i], 0, boardSize);
         }
@@ -90,6 +89,11 @@ public class Game {
 
         blacksTurn = !blacksTurn;
         return output.toString();
+    }
+
+    private void unPass() {
+        if(blacksTurn) blackPassed = false;
+        else whitePassed = false;
     }
 
     private String pass() {
@@ -140,5 +144,14 @@ public class Game {
         return fields[x][y] != BoardField.EMPTY;
     }
 
+    private int countTerritory(BoardField bField) {
+        //TODO: implement
+        return 0;
+    }
 
+    public String countWinner() {
+        if(countTerritory(BoardField.WHITE) > countTerritory(BoardField.BLACK)) return "White";
+        if(countTerritory(BoardField.WHITE) < countTerritory(BoardField.BLACK)) return "Black";
+        return "draw";
+    }
 }
