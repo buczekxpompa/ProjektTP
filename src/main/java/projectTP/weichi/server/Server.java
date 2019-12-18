@@ -17,7 +17,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server {
-    private ServerSocket server;
+    protected ServerSocket server;
     private ArrayList<CombinedGame> allGames = new ArrayList<>();
 
     public Server() {
@@ -33,7 +33,7 @@ public class Server {
         }
     }
 
-    private void serverLoop() throws DidntConnectException{
+    protected void serverLoop() throws DidntConnectException{
         while (true) {
             Socket socket;
             try {
@@ -48,7 +48,7 @@ public class Server {
         }
     }
 
-    private void makeServer() throws DidntCreateServerException {
+    protected void makeServer() throws DidntCreateServerException {
         int port = 4999;
         try {
             server = new ServerSocket(port);
@@ -107,7 +107,8 @@ public class Server {
                 readInput();
                 parser.setLine(line);
                 Point x = parser.parsePoint();
-                String response = parser.parseMoveResponse(game.move(x));
+                parser.setLine(game.move(x));
+                String response = parser.parseMoveResponse();
                 output.println(response);
                 player2.println(response);
             } while(!game.won());
@@ -126,9 +127,20 @@ public class Server {
                 readInput();
                 parser.setLine(line);
                 Point x = parser.parsePoint();
-                String response = parser.parseMoveResponse(game.move(x));
+                parser.setLine(game.move(x));
+                String response = parser.parseMoveResponse();
                 output.println(response);
-            } while(game.won());
+
+                x = game.botMove();
+                parser.setLine(game.move(x));
+                response = parser.parseMoveResponse();
+                output.println(response);
+            } while(!game.won());
+
+            String winner = game.countWinner();
+            parser.setLine(winner);
+            String res = parser.parseWinner();
+            output.println(res);
         }
 
         private Game createGame() {
@@ -173,8 +185,11 @@ public class Server {
         private void readInput() {
             try {
                 line = input.readLine();
-                            }
-            catch (IOException ignored) {}
+            }
+            catch (IOException ex) {
+                output.println("you won");
+                player2.println("you won");
+            }
         }
 
     }

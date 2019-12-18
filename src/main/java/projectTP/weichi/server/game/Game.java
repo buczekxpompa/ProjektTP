@@ -13,7 +13,7 @@ public class Game {
     boolean blacksTurn = true;
     public String id = "";
 
-    Bot aiBot = null;
+    public Bot aiBot = null;
     int boardSize;
 
     public Game(boolean bot, int size) {
@@ -27,6 +27,10 @@ public class Game {
                 fields[i][j] = BoardField.EMPTY;
             }
         }
+        randomID();
+    }
+
+    public Game() {
         randomID();
     }
 
@@ -49,7 +53,7 @@ public class Game {
     }
 
     private void addBot() {
-        aiBot = new Bot();
+        aiBot = new Bot(this);
     }
 
     public int getSize() {
@@ -106,7 +110,7 @@ public class Game {
 
     // ***** RULES ***** //
 
-    private boolean validateMove(Point point) {
+    public boolean validateMove(Point point) {
         return !(dead(point) || occupied(point) || koViolation(point));
     }
 
@@ -139,5 +143,9 @@ public class Game {
         if(countTerritory(BoardField.WHITE) > countTerritory(BoardField.BLACK)) return "White";
         if(countTerritory(BoardField.WHITE) < countTerritory(BoardField.BLACK)) return "Black";
         return "draw";
+    }
+
+    public Point botMove() {
+        return aiBot.bestMove();
     }
 }

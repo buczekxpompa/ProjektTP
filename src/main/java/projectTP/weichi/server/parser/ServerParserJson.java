@@ -65,10 +65,10 @@ public class ServerParserJson implements ServerParser {
     }
 
     @Override
-    public String parseMoveResponse(String response) {
+    public String parseMoveResponse() {
         StringBuilder builder = new StringBuilder();
         builder.append("[");
-        String[] args = response.split("\"");
+        String[] args = parsedLine.split("\"");
         for(String arg : args) {
             if(arg.equals("pass")){
                 return "{\"pass\":1}";

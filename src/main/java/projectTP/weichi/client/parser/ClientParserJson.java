@@ -2,7 +2,6 @@ package projectTP.weichi.client.parser;
 
 import projectTP.weichi.server.game.BoardField;
 import projectTP.weichi.server.support.ColoredPoint;
-import projectTP.weichi.server.support.GameConfig;
 
 import java.util.ArrayList;
 
@@ -30,6 +29,10 @@ public class ClientParserJson implements ClientParser{
     public ArrayList<ColoredPoint> parseResponse(String line) {
         System.out.println(line);
         ArrayList<ColoredPoint> output = new ArrayList<>();
+        if(line.contentEquals("you won")) {
+            output.add(new ColoredPoint(-4, -4, BoardField.EMPTY));
+            return output;
+        }
         String[] args = line.split("}");
         for(String arg: args) {
             String[] point = arg.split("\"");
@@ -60,7 +63,6 @@ public class ClientParserJson implements ClientParser{
                     }
                 } else if(point[i].contentEquals("pass")) {
                     output.add(new ColoredPoint(-2, -2, BoardField.BLACK));
-                    output.add(new ColoredPoint(-2, -2, BoardField.WHITE));
                 } else if(point[i].contentEquals("winner")) {
                     switch(point[i+2]) {
                         case "White": output.add(new ColoredPoint(-3, -3, BoardField.WHITE));
@@ -74,7 +76,8 @@ public class ClientParserJson implements ClientParser{
                     }
                 }
             }
-            output.add(new ColoredPoint(x, y , color));
+            if(x != -1 && y != -1)
+                output.add(new ColoredPoint(x, y , color));
         }
 
         return output;
@@ -115,6 +118,4 @@ public class ClientParserJson implements ClientParser{
         System.out.println(line);
         return output;
     }
-
-
 }
