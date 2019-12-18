@@ -11,6 +11,7 @@ import projectTP.weichi.client.parser.ClientParser;
 import projectTP.weichi.client.parser.ClientParserJson;
 import projectTP.weichi.server.support.ColoredPoint;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -62,14 +63,18 @@ public class Client {
         output.println(parser.prepareGameConfig(id));
         readInput();
         int size = parser.parseGameConfig(line);
+        if(size == 0)
+            return;
         gameFrame = new GameFrame(size, "WHITE", id);
         gameFrame.addObserver( new GameFrameObserver(this));
         Thread thread = new Thread() {
             @Override
             public void run() {
-                readInput();
-                ArrayList<ColoredPoint> changes = parser.parseResponse(line);
-                gameFrame.updateState(changes);
+                ArrayList<ColoredPoint> changes;
+                do {
+                    readInput();
+                    changes = parser.parseResponse(line);
+                } while(!gameFrame.updateState(changes));
             }
         };
         thread.start();
@@ -81,14 +86,14 @@ public class Client {
                 ArrayList<ColoredPoint> changes;
                 output.println(parser.prepareMove(x, y));
                 readInput();
+                System.out.println("waiting for my move");
                 changes = parser.parseResponse(line);
                 if(gameFrame.updateState(changes)) {
-                    gameFrame.revalidate();
                     do {
                         readInput();
+                        System.out.println("waiting for opponent's move");
                         changes = parser.parseResponse(line);
                     } while(!gameFrame.updateState(changes));
-                    gameFrame.revalidate();
                 }
             }
 
@@ -105,6 +110,14 @@ public class Client {
                 @Override
                 public void run() {
                     readInput();
+                    if(line.equals("gotow")) {
+                        JDialog joined = new JDialog();
+                        joined.add(new JLabel("Second player has joined!"));
+                        joined.setBounds( 100,100, 200,120 );
+                        joined.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                        joined.setVisible(true);
+                        output.println("gotow");
+                    }
                 }
             };
             thread.start();

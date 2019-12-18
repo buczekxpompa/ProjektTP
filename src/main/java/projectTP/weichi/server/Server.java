@@ -88,8 +88,10 @@ public class Server {
 
         @Override
         public void run() {
-            output.println(parser.prepareGames(allGames));
-            game = createGame();
+            do {
+                output.println(parser.prepareGames(allGames));
+                game = createGame();
+            } while(game == null);
             if(join)
                 playJoin();
             else
@@ -97,22 +99,26 @@ public class Server {
         }
 
         private void playJoin() {
-            boolean first = true;
+            if(sharedGame != null) {
+                readInput();
+                allGames.remove(sharedGame);
+            }
             do {
                 readInput();
-                if(sharedGame != null && first) {
-                    allGames.remove(sharedGame);
-                }
                 parser.setLine(line);
                 Point x = parser.parsePoint();
                 String response = parser.parseMoveResponse(game.move(x));
                 output.println(response);
                 player2.println(response);
-                first = false;
             } while(!game.won());
+
             String winner = game.countWinner();
             parser.setLine(winner);
-            output.println(parser.parseWinner());
+            String res = parser.parseWinner();
+            output.println(res);
+            player2.println(res);
+            output.println(res);
+            player2.println(res);
         }
 
         private void playBot() {
@@ -122,7 +128,7 @@ public class Server {
                 Point x = parser.parsePoint();
                 String response = parser.parseMoveResponse(game.move(x));
                 output.println(response);
-            } while(!game.won());
+            } while(game.won());
         }
 
         private Game createGame() {
@@ -142,15 +148,17 @@ public class Server {
                     }
                 }
             }
+            Game g = null;
+            if(config.getSize() > 0) {
+                g = new Game(config.getBot(), config.getSize());
+                output.println(g.getID());
 
-            Game g = new Game(config.getBot(), config.getSize());
-            output.println(g.getID());
-
-            if(!g.getBot()) {
-                sharedGame = new CombinedGame(g, this);
-                allGames.add(sharedGame);
-                join = true;
-            } else join = false;
+                if (!g.getBot()) {
+                    sharedGame = new CombinedGame(g, this);
+                    allGames.add(sharedGame);
+                    join = true;
+                } else join = false;
+            }
             return g;
         }
 

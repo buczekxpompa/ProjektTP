@@ -90,6 +90,7 @@ public class GameFrame extends JFrame implements Observable{
                 }
                 if(change.getY() == -3 && change.getX() == -3) {
                     winner(change.getColor());
+                    return true;
                 }
                 for(ButtonCoordinated field : fields) {
                     if(field.getCoordinateX() == change.getX() && field.getCoordinateY() == change.getY()) {
@@ -104,6 +105,7 @@ public class GameFrame extends JFrame implements Observable{
                     }
                 }
             }
+            passed.setText("                    ");
             return true;
         }
         return false;

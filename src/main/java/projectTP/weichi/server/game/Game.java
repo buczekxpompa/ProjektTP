@@ -2,7 +2,6 @@ package projectTP.weichi.server.game;
 
 import projectTP.weichi.server.support.Point;
 
-import java.nio.charset.Charset;
 import java.util.Random;
 
 
@@ -65,6 +64,7 @@ public class Game {
         if(point.getX() == -2 && point.getY() == -2) return pass();
         if(!validateMove(point)) return output.toString();
 
+        unPass();
         for(int i = 0; i < boardSize; i++) {
             System.arraycopy(fields[i], 0, stateChange[i], 0, boardSize);
         }
@@ -89,6 +89,11 @@ public class Game {
 
         blacksTurn = !blacksTurn;
         return output.toString();
+    }
+
+    private void unPass() {
+        if(blacksTurn) blackPassed = false;
+        else whitePassed = false;
     }
 
     private String pass() {
@@ -126,6 +131,7 @@ public class Game {
     }
 
     private int countTerritory(BoardField bField) {
+        //TODO: implement
         return 0;
     }
 
