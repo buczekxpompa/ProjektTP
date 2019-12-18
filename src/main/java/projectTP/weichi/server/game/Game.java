@@ -106,20 +106,31 @@ public class Game {
         return !(dead(point) || occupied(point) || koViolation(point));
     }
 
-    private void capture(Point point) {
+    //zajmowane pola (otaczane przez przeciwnika)
+    private capture(Point point) {
         //TODO: implement
-        fields[point.getX()][point.getY()] = BoardField.EMPTY;
+        if(blacksTurn && move(Point point) == 0) {
+            return {fields[point.getX()][point.getY()] = BoardField.EMPTY;}
+        }
     }
 
+    //martwe pole jak zwroci 0 to jest martwe a jak co innego to bedzie git //nie ma oddechów
     private boolean dead(Point point) {
         //TODO: implement
-        fields[point.getX()][point.getY()] = BoardField.EMPTY;
-        return false;
+        if(move(Point point) == 0)
+        {
+            return false;
+        }
+        else return true;
     }
 
+    //KO rule
     private boolean koViolation(Point point) {
         //TODO: implement
-        System.out.println("Forbidden move");
+        if(blacksTurn && point.getX() == 0 && point.getY() == 0 && !blacksTurn && point.getX() == 0  && point.getY() == 0)
+        {
+            System.out.println("Forbidden move");
+        }
         return false;
     }
 
