@@ -14,7 +14,8 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 
-public class GameFrame extends JFrame implements Observable{
+public class GameFrame extends JFrame implements Observable {
+    private boolean win = false;
     private Observer observer;
     private boolean blacksTurn = true;
     private JLabel blacksTurnLabel = new JLabel("Turn: Black        ");
@@ -80,9 +81,13 @@ public class GameFrame extends JFrame implements Observable{
     }
 
     public boolean updateState(ArrayList<ColoredPoint> changes) {
-        if(changes.size() > 1) {
+        if(changes.size() > 0) {
             updateTurn();
             for(ColoredPoint change : changes) {
+                if(change.getX() == -4 && change.getY() == -4) {
+                    winner(null);
+                    return true;
+                }
                 if(change.getY() == -2 && change.getX() == -2) {
                     if(blacksTurn) passed.setText("White has passed!   ");
                     else passed.setText("Black has passed!   ");
@@ -112,17 +117,31 @@ public class GameFrame extends JFrame implements Observable{
     }
 
     private void winner(BoardField color) {
-        JDialog win = new JDialog();
-        switch (color) {
-            case BLACK: win.add(new JLabel("Black player is a winner!!!"));
-                break;
-            case WHITE: win.add(new JLabel("White player is a winner!!!"));
-                break;
-            default: win.add(new JLabel("It is a draw!!!"));
+        if(!win) {
+            win = true;
+            JDialog win = new JDialog();
+            if(color == null) {
+                win.add(new JLabel("Second player resigned, you win!!!"));
+            } else {
+                switch (color) {
+                    case BLACK:
+                        win.add(new JLabel("Black player is a winner!!!"));
+                        break;
+                    case WHITE:
+                        win.add(new JLabel("White player is a winner!!!"));
+                        break;
+                    case EMPTY:
+                        win.add(new JLabel("It is a draw!!!"));
+                        break;
+                    default:
+
+                }
+            }
+            win.setBounds(50, 50, 250, 70);
+            win.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            win.setVisible(true);
+            this.dispose();
         }
-        win.setBounds(50,50,200,70);
-        win.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        win.setVisible(true);
         this.dispose();
     }
 

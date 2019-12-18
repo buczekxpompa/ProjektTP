@@ -1,15 +1,21 @@
 package projectTP.weichi.server;
 
 import org.junit.Test;
+import projectTP.weichi.server.game.Game;
 import projectTP.weichi.server.parser.ServerParser;
 import projectTP.weichi.server.parser.ServerParserJson;
+import projectTP.weichi.server.support.CombinedGame;
 import projectTP.weichi.server.support.GameConfig;
 import projectTP.weichi.server.support.Point;
+
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
 public class ParserTest {
     ServerParser parser = new ServerParserJson();
+
     @Test
     public void testGameConfig1() {
         parser.setLine("{\"type\":\"gameConfig\",\"bot\":\"false\",\"size\":\"13\"}");
@@ -58,6 +64,35 @@ public class ParserTest {
         assertEquals(2, point.getY());
     }
 
+    @Test
+    public void testSize1() {
+        assertEquals("{\"size\":\"9\"}", parser.prepareGameConfig(9));
+        assertEquals("{\"size\":\"13\"}", parser.prepareGameConfig(13));
+        assertEquals("{\"size\":\"19\"}", parser.prepareGameConfig(19));
+    }
 
+    @Test
+    public void testAllGames1() {
+        ArrayList<CombinedGame> allGames = new ArrayList<>();
+        assertEquals("[]", parser.prepareGames(allGames));
+        Game game1 = new Game(true, 13);
+        allGames.add(new CombinedGame(game1, null));
+        assertEquals("[{\"id\":\"" + game1.getID() + "\"}]", parser.prepareGames(allGames));
+        Game game2 = new Game(false, 9);
+        allGames.add(new CombinedGame(game2, null));
+        assertEquals("[{\"id\":\"" + game1.getID() + "\"},{\"id\":\"" + game2.getID() + "\"}]", parser.prepareGames(allGames));
+        Game game3 = new Game(true, 19);
+        allGames.add(new CombinedGame(game3, null));
+        assertEquals("[{\"id\":\"" + game1.getID() + "\"},{\"id\":\"" + game2.getID() + "\"},{\"id\":\"" + game3.getID() + "\"}]", parser.prepareGames(allGames));
+    }
 
+    @Test
+    public void testWinner() {
+        parser.setLine("Black");
+        assertEquals("{\"winner\":\"Black\"}" , parser.parseWinner());
+        parser.setLine("White");
+        assertEquals("{\"winner\":\"White\"}" , parser.parseWinner());
+        parser.setLine("Draw");
+        assertEquals("{\"winner\":\"Draw\"}" , parser.parseWinner());
+    }
 }

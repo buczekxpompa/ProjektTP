@@ -1,11 +1,8 @@
-package projectTP.weichi;
+package projectTP.weichi.runners;
 
 import projectTP.weichi.client.Client;
 
-public class test1 {
-    /**
-     * Rigorous Test :-)
-     */
+public class ClientRunner2 {
     public static void main( String[] args ) {
         new Client();
     }
