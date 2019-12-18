@@ -11,6 +11,7 @@ public class GameFrameObserver implements Observer{
 
     @Override
     public void onEvent(ObservableEvent event) {
-        client.makeMove(event.getX(), event.getY());
+        if(!client.isReading())
+            client.makeMove(event.getX(), event.getY());
     }
 }

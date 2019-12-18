@@ -1,6 +1,7 @@
 package projectTP.weichi.server.parser;
 
 import projectTP.weichi.server.game.Game;
+import projectTP.weichi.server.support.CombinedGame;
 import projectTP.weichi.server.support.GameConfig;
 import projectTP.weichi.server.support.Point;
 
@@ -96,18 +97,23 @@ public class ServerParserJson implements ServerParser {
     }
 
     @Override
-    public String prepareGames(ArrayList<Game> games) {
+    public String prepareGames(ArrayList<CombinedGame> games) {
         StringBuilder out = new StringBuilder("[");
-        for(Game game : games) {
-            if(!game.getBot()) {
-                out.append("{\"id\":\"")
-                        .append(game.getID())
-                        .append("\"},");
-            }
+        for(CombinedGame game : games) {
+            out.append("{\"id\":\"")
+                    .append(game.getGame().getID())
+                    .append("\"},");
         }
         if(out.lastIndexOf(",") != -1) out.deleteCharAt(out.lastIndexOf(","));
         out.append("]");
         System.out.println(out.toString());
         return out.toString();
+    }
+
+    @Override
+    public String parseWinner() {
+        return "{\"winner\":\"" +
+                parsedLine +
+                "\"}";
     }
 }

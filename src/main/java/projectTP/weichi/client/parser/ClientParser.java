@@ -1,7 +1,6 @@
 package projectTP.weichi.client.parser;
 
 import projectTP.weichi.server.support.ColoredPoint;
-import projectTP.weichi.server.support.GameConfig;
 
 import java.util.ArrayList;
 

@@ -10,8 +10,8 @@ import projectTP.weichi.client.observer.SizeFrameObserver;
 import projectTP.weichi.client.parser.ClientParser;
 import projectTP.weichi.client.parser.ClientParserJson;
 import projectTP.weichi.server.support.ColoredPoint;
-import projectTP.weichi.server.support.GameConfig;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,6 +21,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class Client {
+    private boolean reading = false;
     private String line;
     private PrintWriter output;
     private BufferedReader input;
@@ -32,7 +33,7 @@ public class Client {
         startLobby();
     }
 
-    private void startLobby() {
+    public void startLobby() {
         readInput();
         Lobby lobby = new Lobby(parser.parseGames(line));
         LobbyObserver lobbyObserver = new LobbyObserver(this);
@@ -43,14 +44,6 @@ public class Client {
         SizeFrame sizeFrame = new SizeFrame();
         SizeFrameObserver sizeFrameObserver = new SizeFrameObserver(this);
         sizeFrame.addObserver(sizeFrameObserver);
-    }
-
-
-    public void run() {
-        GameFrameObserver gameFrameObserver = new GameFrameObserver(this);
-        gameFrame.addObserver(gameFrameObserver);
-
-        // rematch?
     }
 
     private void connect() {
@@ -70,26 +63,78 @@ public class Client {
         output.println(parser.prepareGameConfig(id));
         readInput();
         int size = parser.parseGameConfig(line);
-        gameFrame = new GameFrame(size);
-        GameFrameObserver gameFrameObserver = new GameFrameObserver(this);
-        gameFrame.addObserver(gameFrameObserver);
+        if(size == 0)
+            return;
+        gameFrame = new GameFrame(size, "WHITE", id);
+        gameFrame.addObserver( new GameFrameObserver(this));
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                ArrayList<ColoredPoint> changes;
+                do {
+                    readInput();
+                    changes = parser.parseResponse(line);
+                } while(!gameFrame.updateState(changes));
+            }
+        };
+        thread.start();
     }
-    public void makeMove(int x, int y) {
-        output.println(parser.prepareMove(x, y));
-        readInput();
-        ArrayList<ColoredPoint> changes = parser.parseResponse(line);
-        gameFrame.updateState(changes);
+    public void makeMove(final int x, final int y) {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                ArrayList<ColoredPoint> changes;
+                output.println(parser.prepareMove(x, y));
+                readInput();
+                System.out.println("waiting for my move");
+                changes = parser.parseResponse(line);
+                if(gameFrame.updateState(changes)) {
+                    do {
+                        readInput();
+                        System.out.println("waiting for opponent's move");
+                        changes = parser.parseResponse(line);
+                    } while(!gameFrame.updateState(changes));
+                }
+            }
+
+        };
+        thread.start();
     }
-    public void createGame(boolean bot, int size) {
-        gameFrame = new GameFrame(size);
-        GameFrameObserver gameFrameObserver = new GameFrameObserver(this);
-        gameFrame.addObserver(gameFrameObserver);
+    public void createGame(final boolean bot, int size) {
         output.println(parser.prepareGameConfig(bot, size));
+        readInput();
+        gameFrame = new GameFrame(size, "BLACK", line);
+        gameFrame.addObserver( new GameFrameObserver(this));
+        if (!bot) {
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    readInput();
+                    if(line.equals("gotow")) {
+                        JDialog joined = new JDialog();
+                        joined.add(new JLabel("Second player has joined!"));
+                        joined.setBounds( 100,100, 200,120 );
+                        joined.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                        joined.setVisible(true);
+                        output.println("gotow");
+                    }
+                }
+            };
+            thread.start();
+        }
     }
     private void readInput() {
+        System.out.println("waiting for input");
+        reading = true;
         try { line = input.readLine(); }
         catch (IOException e) {
             System.out.println("Reading problem occurred.");
         }
+        reading = false;
+        System.out.println("got it \n");
+    }
+
+    public boolean isReading() {
+        return reading;
     }
 }

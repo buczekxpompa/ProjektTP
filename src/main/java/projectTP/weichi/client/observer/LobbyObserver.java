@@ -10,6 +10,7 @@ public class LobbyObserver implements Observer {
     }
     @Override
     public void onEvent(ObservableEvent event) {
+        if(event.getId().equals("-1")) client.startLobby();
         if(!event.getId().equals("0")) client.joinGame(event.getId());
         else client.startSizeFrame();
     }

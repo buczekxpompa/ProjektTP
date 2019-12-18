@@ -1,6 +1,7 @@
 package projectTP.weichi.server.parser;
 
 import projectTP.weichi.server.game.Game;
+import projectTP.weichi.server.support.CombinedGame;
 import projectTP.weichi.server.support.GameConfig;
 import projectTP.weichi.server.support.Point;
 
@@ -12,5 +13,6 @@ public interface ServerParser {
     GameConfig parseGameConfig();
     String parseMoveResponse(String response);
     String prepareGameConfig(int size);
-    String prepareGames(ArrayList<Game> games);
+    String prepareGames(ArrayList<CombinedGame> games);
+    String parseWinner();
 }
