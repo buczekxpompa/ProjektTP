@@ -8,13 +8,13 @@ import java.util.Random;
 public class Game {
     BoardField[][] fields;
     BoardField[][] stateChange;
-    boolean blackPassed = false;
-    boolean whitePassed = false;
-    boolean blacksTurn = true;
-    public String id = "";
+    private boolean blackPassed = false;
+    private boolean whitePassed = false;
+    private boolean blacksTurn = true;
+    private  String id = "";
 
-    public Bot aiBot = null;
-    int boardSize;
+    private  Bot aiBot = null;
+    private int boardSize;
 
     public Game(boolean bot, int size) {
         if(bot) addBot();
@@ -32,10 +32,6 @@ public class Game {
 
     public Game() {
         randomID();
-    }
-
-    private void addPlayer() {
-
     }
 
     private void randomID() {
@@ -114,8 +110,9 @@ public class Game {
         return !(dead(point) || occupied(point) || koViolation(point));
     }
 
-    private void capture(Point point) {
+    private int capture(Point point) {
         //TODO: implement
+        return 0;
     }
 
     private boolean dead(Point point) {

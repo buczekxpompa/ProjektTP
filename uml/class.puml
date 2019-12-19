@@ -1,12 +1,67 @@
 @startuml
 
 package Server {
-    class Server
+    class Server {
+        #ServerSocket server
+        -ArrayList<combinedGames> allGames
+        #makeServer()
+        #serverLopp()
+    }
+    class ServerThread {
+        #String line
+        #BufferedReader input
+        #PrintWriter output
+        -PrintWriter player2
+        -ServerParser parser
+        -Game game
+        CombinedGame sheredGame
+
+        #connect(Socket socket)
+        #readInput()
+        +setPlayer2()
+        +run()
+        -playJoin()
+        -playBot()
+        -Game createGame()
+    }
     package Geme {
         class Game {
+            ~BoardField[][] fields
+            -boolean blackPassed
+            -boolean whitePassed
+            -boolean blackTurn
+            -String id
+            -Bot aiBot
+            -int boardSize
 
+            ---
+            -randomID()
+            ---
+            +String getID()
+            +boolean getBot()
+            +getSize()
+            ---
+            +Point botMove()
+            +boolean won()
+            +String move(Point)
+            ---
+            -pass()
+            -unPass()
+            == Rules ==
+            +validateMove(Point)
+            +countWinner()
+            -int capture(Point)
+            -boolean dead(Point)
+            -boolean occupied(Point)
+            -boolean koViolation(Point)
+            -int countTerritory(BoardField color)
         }
-        class Bot
+        class Bot {
+            -Game game
+            ~Point bestMove()
+            -int eveluatePoint()
+        }
+        Bot -* Game
     }
     package Blocks {
         class ColoredPoint {
@@ -32,6 +87,30 @@ package Server {
             set()
         }
         Point <|-- ColoredPoint
+    }
+    package parser {
+        interface ServerParser{
+            setLine()
+            Point parsePoint()
+            GameConfig parseGameConfig()
+            String parseMoveResponse()
+            String parseWinner()
+            String prepareGameConfig(int size)
+            String PrepareGames(ArrayList<combinedGame> games)
+        }
+        class ServerParserJson {
+            -String parsedLine
+            -- implemened functions --
+            +setLine()
+            +Point parsePoint()
+            +GameConfig parseGameConfig()
+            +String parseMoveResponse()
+            +String parseWinner()
+            +String prepareGameConfig(int size)
+            +String PrepareGames(ArrayList<combinedGame> games)
+        }
+
+        ServerParser <|..ServerParserJson
     }
 }
 
