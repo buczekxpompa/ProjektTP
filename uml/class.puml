@@ -63,31 +63,6 @@ package Server {
         }
         Bot -* Game
     }
-    package Blocks {
-        class ColoredPoint {
-            BoardField color
-            get()
-            set()
-        }
-        class CombinedGame {
-            Game game
-            ServerThread player
-            get()
-        }
-        class GameConfig {
-            boolean bot
-            int size
-            String id
-            get();
-        }
-        class Point {
-            int x
-            int y
-            get()
-            set()
-        }
-        Point <|-- ColoredPoint
-    }
     package parser {
         interface ServerParser{
             setLine()
@@ -112,6 +87,183 @@ package Server {
 
         ServerParser <|..ServerParserJson
     }
+    package Blocks {
+        class ColoredPoint {
+            BoardField color
+            +get()
+            +set()
+        }
+        enum BoardField {
+            BLACK
+            WHITE
+            WMPTY
+        }
+        class CombinedGame {
+            -Game game
+            -ServerThread player
+            +get()
+        }
+        class GameConfig {
+            -boolean bot
+            -int size
+            -String id
+            +get();
+        }
+        class Point {
+            -int x
+            -int y
+            +get()
+            +set()
+        }
+        Point <|-- ColoredPoint
+    }
+
+    ServerParser -- ServerThread
+    Server -- ServerThread
+    ServerThread -- Game
+    Game .. Point
+    ServerParser .. ColoredPoint
+    Game .. ColoredPoint
+    ServerThread .. GameConfig
+    Server .. CombinedGame
+    ColoredPoint o-- BoardField
+}
+
+package Client {
+    class Client {
+        #String line
+        #PrintWriter output
+        #BufferedReader input
+        -boolean reading
+        -GameFrame gameFrame
+        -ClientParser parser
+        ---
+        #connect()
+        #readInput()
+        +isReading()
+        ---
+        +startLobby()
+        +startSizeFrame()
+        +joinGame()
+        +createGame(boolean bot, int size)
+        +makeMove(int x, int y)
+    }
+    package Parser {
+        interface ClientParser {
+            String prepareMove(int x, int y)
+            String prepareGameConfig(boolean bot, int size)
+            ArrayList<ColoredPoint> parseResponse(String line)
+            String prepareGameConfig(String id)
+            int parseGameConfig(String line)
+            ArrayList<String> parseGames(String line)
+        }
+        class ClientParserJson {
+            -- implemented functions --
+            +String prepareMove(int x, int y)
+            +String prepareGameConfig(boolean bot, int size)
+            +ArrayList<ColoredPoint> parseResponse(String line)
+            +String prepareGameConfig(String id)
+            +int parseGameConfig(String line)
+            +ArrayList<String> parseGames(String line)
+        }
+        ClientParser <|.. ClientParserJson
+    }
+    package Observer {
+        interface Observer {
+            onEvent(ObservableEvent)
+        }
+        interface Observable {
+            addObserver(Observer)
+            removeObserver()
+        }
+        class ObservableEvent {
+            -int x
+            -int y
+            -boolean bot
+            -int size
+            -String id
+
+            +get()
+        }
+        class LobbyObserver {
+            -Client client
+        }
+        class SizeFrameObserver {
+            -Client client
+        }
+        class GameFrameObserver {
+            -Client client
+        }
+        Observer <|.. GameFrameObserver
+        Observer <|.. LobbyObserver
+        Observer <|.. SizeFrameObserver
+        SizeFrameObserver -- ObservableEvent
+        GameFrameObserver -- ObservableEvent
+        LobbyObserver -- ObservableEvent
+    }
+    package frames {
+        package elements {
+            class ButtonCoordinated {
+                -int coordineteX
+                -int coordineteY
+
+                +set()
+                +get()
+                +changeColor(Color)
+            }
+            }
+        }
+        class GameFrame {
+            -boolean win
+            -Observer observer
+            -boolean blackTurn
+            -ArrayList<ButtonCoordinated> fields
+
+            -- Observer functions --
+            +addObserver(Observer)
+            +removeObserver()
+            ---
+            +makeMove(Point)
+            +updateState(ArrayList<ColoredPoint> changes)
+            -pass()
+            -updateTurn()
+            -winner()
+        }
+        class Lobby {
+            -Observer observer
+            -- observable functions --
+            +addObserver(Observer)
+            +removeOserver()
+        }
+        class SizeFrame {
+            -boolean bot
+            -int size
+            -Observer observer
+            ---
+            -accept()
+            -- observabele functions --
+            +addObserver(Observer)
+            -removeObserver()
+        }
+            enum FieldColor {
+                BLACK
+                WHITE
+                EMPTY
+    }
+
+    Observable <|.. Lobby
+    Observable <|.. GameFrame
+    Observable <|.. SizeFrame
+    LobbyObserver -- Lobby
+    LobbyObserver -- Client
+    SizeFrameObserver -- SizeFrame
+    SizeFrameObserver -- Client
+    GameFrameObserver -- GameFrame
+    GameFrameObserver -- Client
+    Client -- ClientParser
+    GameFrame -- FieldColor
+    GameFrame -- ButtonCoordinated
+
 }
 
 @enduml

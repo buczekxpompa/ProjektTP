@@ -1,5 +1,7 @@
 package projectTP.weichi.client.frames;
 
+import projectTP.weichi.client.frames.elements.ButtonCoordinated;
+import projectTP.weichi.client.frames.elements.FieldColor;
 import projectTP.weichi.client.observer.Observable;
 import projectTP.weichi.client.observer.ObservableEvent;
 import projectTP.weichi.client.observer.Observer;
