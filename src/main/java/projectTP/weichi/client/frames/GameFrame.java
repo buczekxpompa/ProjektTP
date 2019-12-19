@@ -4,8 +4,8 @@ import projectTP.weichi.client.observer.Observable;
 import projectTP.weichi.client.observer.ObservableEvent;
 import projectTP.weichi.client.observer.Observer;
 import projectTP.weichi.server.game.BoardField;
-import projectTP.weichi.server.support.ColoredPoint;
-import projectTP.weichi.server.support.Point;
+import projectTP.weichi.server.blocks.ColoredPoint;
+import projectTP.weichi.server.blocks.Point;
 
 
 import javax.swing.*;

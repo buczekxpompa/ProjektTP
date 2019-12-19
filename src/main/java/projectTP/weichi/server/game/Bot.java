@@ -1,6 +1,6 @@
 package projectTP.weichi.server.game;
 
-import projectTP.weichi.server.support.Point;
+import projectTP.weichi.server.blocks.Point;
 
 public class Bot {
     Game game;

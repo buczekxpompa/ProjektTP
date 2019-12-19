@@ -1,4 +1,4 @@
-package projectTP.weichi.server.support;
+package projectTP.weichi.server.blocks;
 
 import projectTP.weichi.server.game.BoardField;
 

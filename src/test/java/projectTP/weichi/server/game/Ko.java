@@ -1,7 +1,7 @@
 package projectTP.weichi.server.game;
 
 import org.junit.Test;
-import projectTP.weichi.server.support.Point;
+import projectTP.weichi.server.blocks.Point;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

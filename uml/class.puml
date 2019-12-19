@@ -1,0 +1,38 @@
+@startuml
+
+package Server {
+    class Server
+    package Geme {
+        class Game {
+
+        }
+        class Bot
+    }
+    package Blocks {
+        class ColoredPoint {
+            BoardField color
+            get()
+            set()
+        }
+        class CombinedGame {
+            Game game
+            ServerThread player
+            get()
+        }
+        class GameConfig {
+            boolean bot
+            int size
+            String id
+            get();
+        }
+        class Point {
+            int x
+            int y
+            get()
+            set()
+        }
+        Point <|-- ColoredPoint
+    }
+}
+
+@enduml

@@ -4,9 +4,9 @@ import org.junit.Test;
 import projectTP.weichi.server.game.Game;
 import projectTP.weichi.server.parser.ServerParser;
 import projectTP.weichi.server.parser.ServerParserJson;
-import projectTP.weichi.server.support.CombinedGame;
-import projectTP.weichi.server.support.GameConfig;
-import projectTP.weichi.server.support.Point;
+import projectTP.weichi.server.blocks.CombinedGame;
+import projectTP.weichi.server.blocks.GameConfig;
+import projectTP.weichi.server.blocks.Point;
 
 
 import java.util.ArrayList;
