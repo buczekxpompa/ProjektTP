@@ -1,10 +1,7 @@
-package projectTP.weichi.client.frames;
-
-import projectTP.weichi.client.frames.FieldColor;
+package projectTP.weichi.client.frames.elements;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class ButtonCoordinated extends JButton {
     private int coordinateX;

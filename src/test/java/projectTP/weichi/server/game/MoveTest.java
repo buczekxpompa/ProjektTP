@@ -3,7 +3,7 @@ package projectTP.weichi.server.game;
 import org.junit.Test;
 import projectTP.weichi.server.parser.ServerParser;
 import projectTP.weichi.server.parser.ServerParserJson;
-import projectTP.weichi.server.support.Point;
+import projectTP.weichi.server.blocks.Point;
 
 import static org.junit.Assert.assertEquals;
 

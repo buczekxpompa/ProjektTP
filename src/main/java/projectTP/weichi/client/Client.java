@@ -9,7 +9,7 @@ import projectTP.weichi.client.observer.LobbyObserver;
 import projectTP.weichi.client.observer.SizeFrameObserver;
 import projectTP.weichi.client.parser.ClientParser;
 import projectTP.weichi.client.parser.ClientParserJson;
-import projectTP.weichi.server.support.ColoredPoint;
+import projectTP.weichi.server.blocks.ColoredPoint;
 
 import javax.swing.*;
 import java.io.BufferedReader;

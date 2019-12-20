@@ -4,9 +4,9 @@ import projectTP.weichi.server.exceptions.*;
 import projectTP.weichi.server.game.Game;
 import projectTP.weichi.server.parser.ServerParser;
 import projectTP.weichi.server.parser.ServerParserJson;
-import projectTP.weichi.server.support.CombinedGame;
-import projectTP.weichi.server.support.GameConfig;
-import projectTP.weichi.server.support.Point;
+import projectTP.weichi.server.blocks.CombinedGame;
+import projectTP.weichi.server.blocks.GameConfig;
+import projectTP.weichi.server.blocks.Point;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -60,10 +60,10 @@ public class Server {
 
 
     public class ServerThread extends Thread {
-        private BufferedReader input;
-        private PrintWriter output;
+        protected BufferedReader input;
+        protected PrintWriter output;
         private PrintWriter player2;
-        private String line;
+        protected String line;
         private ServerParser parser = new ServerParserJson();
         private Game game;
         private boolean join;
@@ -77,7 +77,7 @@ public class Server {
             }
         }
 
-        private void connect(Socket socket) throws DidntConfigureCorrectlyException {
+        protected void connect(Socket socket) throws DidntConfigureCorrectlyException {
             try {
                 input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 output = new PrintWriter(socket.getOutputStream(),true);
@@ -182,7 +182,7 @@ public class Server {
             this.player2 = player2;
         }
 
-        private void readInput() {
+        protected void readInput() {
             try {
                 line = input.readLine();
             }

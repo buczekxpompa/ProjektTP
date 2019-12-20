@@ -1,4 +1,4 @@
-package projectTP.weichi.server.support;
+package projectTP.weichi.server.blocks;
 
 public class GameConfig {
     private boolean bot;

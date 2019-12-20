@@ -3,7 +3,7 @@ package projectTP.weichi.client.parser;
 import org.junit.Test;
 import projectTP.weichi.server.game.BoardField;
 import projectTP.weichi.server.game.Game;
-import projectTP.weichi.server.support.ColoredPoint;
+import projectTP.weichi.server.blocks.ColoredPoint;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package projectTP.weichi.client.frames;
+package projectTP.weichi.client.frames.elements;
 
 import java.awt.*;
 
