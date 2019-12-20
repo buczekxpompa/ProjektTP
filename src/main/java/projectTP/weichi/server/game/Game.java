@@ -18,7 +18,6 @@ public class Game {
 
     public Game(boolean bot, int size) {
         if(bot) addBot();
-        else addPlayer();
         boardSize = size;
         fields = new BoardField[size][size];
         stateChange = new BoardField[size][size];

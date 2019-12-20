@@ -24,7 +24,7 @@ package Server {
         -playBot()
         -Game createGame()
     }
-    package Geme {
+    package Game {
         class Game {
             ~BoardField[][] fields
             -boolean blackPassed
@@ -118,7 +118,7 @@ package Server {
         Point <|-- ColoredPoint
     }
 
-    ServerParser -- ServerThread
+    ServerParser - ServerThread
     Server -- ServerThread
     ServerThread -- Game
     Game .. Point
@@ -127,6 +127,8 @@ package Server {
     ServerThread .. GameConfig
     Server .. CombinedGame
     ColoredPoint o-- BoardField
+    Game .. BoardField
+    Bot .. ColoredPoint
 }
 
 package Client {
@@ -197,20 +199,24 @@ package Client {
         Observer <|.. GameFrameObserver
         Observer <|.. LobbyObserver
         Observer <|.. SizeFrameObserver
-        SizeFrameObserver -- ObservableEvent
-        GameFrameObserver -- ObservableEvent
-        LobbyObserver -- ObservableEvent
+        ObservableEvent -- SizeFrameObserver
+        ObservableEvent -- GameFrameObserver
+        ObservableEvent -- LobbyObserver
     }
     package frames {
         package elements {
             class ButtonCoordinated {
-                -int coordineteX
-                -int coordineteY
+                -int coordinateX
+                -int coordinateY
 
                 +set()
                 +get()
                 +changeColor(Color)
             }
+            enum FieldColor {
+                BLACK
+                WHITE
+                EMPTY
             }
         }
         class GameFrame {
@@ -245,10 +251,7 @@ package Client {
             +addObserver(Observer)
             -removeObserver()
         }
-            enum FieldColor {
-                BLACK
-                WHITE
-                EMPTY
+
     }
 
     Observable <|.. Lobby
@@ -265,5 +268,8 @@ package Client {
     GameFrame -- ButtonCoordinated
 
 }
+
+Server <- Client
+Client <- Server
 
 @enduml
