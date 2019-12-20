@@ -199,9 +199,9 @@ package Client {
         Observer <|.. GameFrameObserver
         Observer <|.. LobbyObserver
         Observer <|.. SizeFrameObserver
-        ObservableEvent -- SizeFrameObserver
-        ObservableEvent -- GameFrameObserver
-        ObservableEvent -- LobbyObserver
+        ObservableEvent .. SizeFrameObserver
+        ObservableEvent .. GameFrameObserver
+        ObservableEvent .. LobbyObserver
     }
     package frames {
         package elements {
@@ -239,7 +239,7 @@ package Client {
             -Observer observer
             -- observable functions --
             +addObserver(Observer)
-            +removeOserver()
+            +removeObserver()
         }
         class SizeFrame {
             -boolean bot
@@ -254,9 +254,9 @@ package Client {
 
     }
 
-    Observable <|.. Lobby
-    Observable <|.. GameFrame
-    Observable <|.. SizeFrame
+    Observable <|... Lobby
+    Observable <|... GameFrame
+    Observable <|... SizeFrame
     LobbyObserver -- Lobby
     LobbyObserver -- Client
     SizeFrameObserver -- SizeFrame

@@ -2,6 +2,7 @@ package projectTP.weichi.server.game;
 
 import projectTP.weichi.server.blocks.Point;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -13,20 +14,33 @@ public class Game {
     private boolean blacksTurn = true;
     private  String id = "";
 
+    private ArrayList<Point> visited = new ArrayList<>();
+    private ArrayList<Point> pot = new ArrayList<>();
+    private Point origin;
+    private BoardField[][][] twoLastMoves;
+    private Point[] twoLastPoints;
+
     private  Bot aiBot = null;
     private int boardSize;
+    private int blackPoints = 0;
+    private int whitePoints = 7;
 
     public Game(boolean bot, int size) {
         if(bot) addBot();
         boardSize = size;
         fields = new BoardField[size][size];
         stateChange = new BoardField[size][size];
+        twoLastMoves = new BoardField[2][size][size];
         for(int i = 0; i < boardSize; i++) {
             for(int j = 0; j < boardSize; j++){
                 fields[i][j] = BoardField.EMPTY;
+                twoLastMoves[0][i][j] = BoardField.EMPTY;
+                twoLastMoves[1][i][j] = BoardField.EMPTY;
             }
         }
         randomID();
+
+        twoLastPoints = new Point[]{new Point(0, 0), new Point(0, 0)};
     }
 
     public Game() {
@@ -59,8 +73,10 @@ public class Game {
         return blackPassed && whitePassed;
     }
     public String move(Point point) {
+        int x = point.getX();
+        int y = point.getY();
         StringBuilder output = new StringBuilder();
-        if(point.getX() == -2 && point.getY() == -2) return pass();
+        if(x == -2 && y == -2) return pass();
         if(!validateMove(point)) return output.toString();
 
         unPass();
@@ -68,9 +84,24 @@ public class Game {
             System.arraycopy(fields[i], 0, stateChange[i], 0, boardSize);
         }
 
-        if(blacksTurn) fields[point.getX()][point.getY()] = BoardField.BLACK;
-        else fields[point.getX()][point.getY()] = BoardField.WHITE;
-        capture(point);
+        if(blacksTurn) fields[x][y] = BoardField.BLACK;
+        else fields[x][y] = BoardField.WHITE;
+
+
+        int capturePoints = 0;
+        if(blacksTurn) {
+            if(x-1 >= 0 && fields[x-1][y] == BoardField.WHITE && dead(new Point(x-1, y), true)) capturePoints += kill(new Point(x-1, y));
+            if(x+1 < boardSize && fields[x+1][y] == BoardField.WHITE && dead(new Point(x+1, y), true)) capturePoints += kill(new Point(x+1, y));
+            if(y+1 < boardSize && fields[x][y+1] == BoardField.WHITE && dead(new Point(x, y+1), true)) capturePoints += kill(new Point(x, y+1));
+            if(y-1 >= 0 && fields[x][y-1] == BoardField.WHITE && dead(new Point(x, y-1), true)) capturePoints += kill(new Point(x, y-1));
+            blackPoints += capturePoints;
+        } else {
+            if(x-1 >= 0 && fields[x-1][y] == BoardField.BLACK && dead(new Point(x-1, y), true)) capturePoints += kill(new Point(x-1, y));
+            if(x+1 < boardSize && fields[x+1][y] == BoardField.BLACK && dead(new Point(x+1, y), true)) capturePoints += kill(new Point(x+1, y));
+            if(y+1 < boardSize && fields[x][y+1] == BoardField.BLACK && dead(new Point(x, y+1), true)) capturePoints += kill(new Point(x, y+1));
+            if(y-1 >= 0 && fields[x][y-1] == BoardField.BLACK && dead(new Point(x, y-1), true)) capturePoints += kill(new Point(x, y-1));
+            whitePoints += capturePoints;
+        }
 
         for(int i = 0; i < boardSize; i++) {
             for(int j = 0; j < boardSize; j++){
@@ -106,36 +137,122 @@ public class Game {
     // ***** RULES ***** //
 
     public boolean validateMove(Point point) {
-        return !(dead(point) || occupied(point) || koViolation(point));
+        return !(occupied(point) || koViolation(point) || !(!dead(point, false) || capture(point)));
     }
 
+    private boolean capture(Point point) {
+        int x = point.getX();
+        int y = point.getY();
 
-    //zajmowane pola (otaczane przez przeciwnika)
-    private capture(Point point) {
-        //TODO: implement
-        if(blacksTurn && move(Point point) == 0) {
-            return {fields[point.getX()][point.getY()] = BoardField.EMPTY;}
+        if(blacksTurn) {
+            if(x-1 >= 0 && fields[x-1][y] == BoardField.WHITE && dead(new Point(x-1, y), true)) return true;
+            if(x+1 < boardSize && fields[x+1][y] == BoardField.WHITE && dead(new Point(x+1, y), true)) return true;
+            if(y+1 < boardSize && fields[x][y+1] == BoardField.WHITE && dead(new Point(x, y+1), true)) return true;
+            return y - 1 >= 0 && fields[x][y - 1] == BoardField.WHITE && dead(new Point(x, y - 1), true);
+        } else {
+            if(x-1 >= 0 && fields[x-1][y] == BoardField.BLACK && dead(new Point(x-1, y), true)) return true;
+            if(x+1 < boardSize && fields[x+1][y] == BoardField.BLACK && dead(new Point(x+1, y), true)) return true;
+            if(y+1 < boardSize && fields[x][y+1] == BoardField.BLACK && dead(new Point(x, y+1), true)) return true;
+            return y - 1 >= 0 && fields[x][y - 1] == BoardField.BLACK && dead(new Point(x, y - 1), true);
         }
     }
 
-    //martwe pole jak zwroci 0 to jest martwe a jak co innego to bedzie git //nie ma oddechów
-    private boolean dead(Point point) {
-        //TODO: implement
-        if(move(Point point) == 0)
-        {
-            return false;
+    private int kill(Point point) {
+        System.out.println("killing");
+        int out = 1;
+        int x = point.getX();
+        int y = point.getY();
+
+        fields[x][y] = BoardField.EMPTY;
+
+        if(blacksTurn) {
+            if(x-1 >= 0 && fields[x-1][y] == BoardField.WHITE) out+= kill(new Point(x-1, y));
+            if(x+1 < boardSize && fields[x+1][y] == BoardField.WHITE) out += kill(new Point(x+1, y));
+            if(y+1 < boardSize && fields[x][y+1] == BoardField.WHITE) out += kill(new Point(x, y+1));
+            if(y-1 >= 0 && fields[x][y-1] == BoardField.WHITE) out += kill(new Point(x, y-1));
+        } else {
+            if(x-1 >= 0 && fields[x-1][y] == BoardField.BLACK) out+= kill(new Point(x-1, y));
+            if(x+1 < boardSize && fields[x+1][y] == BoardField.BLACK) out += kill(new Point(x+1, y));
+            if(y+1 < boardSize && fields[x][y+1] == BoardField.BLACK) out += kill(new Point(x, y+1));
+            if(y-1 >= 0 && fields[x][y-1] == BoardField.BLACK) out += kill(new Point(x, y-1));
         }
-        else return true;
+
+        return out;
     }
 
-    //KO rule
+    private boolean dead(Point point, boolean toKill) {
+        boolean cond = blacksTurn != toKill;
+        System.out.println(pot);
+
+        int x = point.getX();
+        int y = point.getY();
+        if(fields[x][y] == BoardField.EMPTY) origin = new Point(x, y);
+
+        if(x-1 >= 0 && fields[x-1][y] == BoardField.EMPTY && !(x-1 == origin.getX() && y == origin.getY())) return false;
+        if(x+1 < boardSize && fields[x+1][y] == BoardField.EMPTY && !(x+1 == origin.getX() && y == origin.getY())) return false;
+        if(y+1 < boardSize && fields[x][y+1] == BoardField.EMPTY && !(x == origin.getX() && y+1 == origin.getY())) return false;
+        if(y-1 >= 0 && fields[x][y-1] == BoardField.EMPTY && !(x == origin.getX() && y-1 == origin.getY())) return false;
+
+        if (cond) {
+            if(x-1 >= 0 && fields[x-1][y] == BoardField.BLACK) pot.add(new Point(x-1, y));
+            if(x+1 < boardSize && fields[x+1][y] == BoardField.BLACK) pot.add(new Point(x+1, y));
+            if(y+1 < boardSize && fields[x][y+1] == BoardField.BLACK) pot.add(new Point(x, y+1));
+            if(y-1 >= 0 && fields[x][y-1] == BoardField.BLACK) pot.add(new Point(x, y-1));
+        } else {
+            if(x-1 >= 0 && fields[x-1][y] == BoardField.WHITE) pot.add(new Point(x-1, y));
+            if(x+1 < boardSize && fields[x+1][y] == BoardField.WHITE) pot.add(new Point(x+1, y));
+            if(y+1 < boardSize && fields[x][y+1] == BoardField.WHITE) pot.add(new Point(x, y+1));
+            if(y-1 >= 0 && fields[x][y-1] == BoardField.WHITE) pot.add(new Point(x, y-1));
+        }
+
+        for(Point pt : pot) {
+            boolean visit = false;
+            for(Point v :visited) {
+                if(pt.getX() == v.getX() && pt.getY() == v.getY()) {
+                    visit = true;
+                    pot.remove(pt);
+                    break;
+                }
+            }
+            if(!visit) {
+                visited.add(pt);
+                if(!dead(pt, toKill)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private boolean koViolation(Point point) {
-        //TODO: implement
-        if(blacksTurn && point.getX() == 0 && point.getY() == 0 && !blacksTurn && point.getX() == 0  && point.getY() == 0)
-        {
-            System.out.println("Forbidden move");
+        if(blacksTurn) {
+            for(int j = 0; j < boardSize; j++) {
+                for(int i = 0; i < boardSize; i++) {
+                    if(twoLastMoves[0][j][i] != fields[j][i]) {
+                        twoLastMoves[0] = fields.clone();
+                        return false;
+                    }
+                }
+            }
+            if(!(twoLastPoints[0].getX() == point.getX() && twoLastPoints[0].getY() == point.getY())){
+                twoLastPoints[0] = point;
+                return false;
+            }
+        } else {
+            for(int j = 0; j < boardSize; j++) {
+                for(int i = 0; i < boardSize; i++) {
+                    if(twoLastMoves[1][j][i] != fields[j][i]) {
+                        twoLastMoves[1] = fields.clone();
+                        return false;
+                    }
+                }
+            }
+            if(!(twoLastPoints[1].getX() == point.getX() && twoLastPoints[1].getY() == point.getY())){
+                twoLastPoints[1] = point;
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 
     private boolean occupied(Point point) {
@@ -145,14 +262,18 @@ public class Game {
     }
 
     private int countTerritory(BoardField bField) {
+        int out = 0;
+        if(bField == BoardField.BLACK) out += blackPoints;
+        else out += whitePoints;
+
         //TODO: implement
-        return 0;
+
+        return out;
     }
 
     public String countWinner() {
-        if(countTerritory(BoardField.WHITE) > countTerritory(BoardField.BLACK)) return "White";
-        if(countTerritory(BoardField.WHITE) < countTerritory(BoardField.BLACK)) return "Black";
-        return "draw";
+        if(countTerritory(BoardField.WHITE) >= countTerritory(BoardField.BLACK)) return "White";
+        return "Black";
     }
 
     public Point botMove() {

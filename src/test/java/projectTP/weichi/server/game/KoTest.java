@@ -6,7 +6,7 @@ import projectTP.weichi.server.blocks.Point;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class Ko {
+public class KoTest {
     @Test
     public void testKo() {
         Game game = new Game(false, 19);
@@ -22,5 +22,23 @@ public class Ko {
         game.move(new Point(0,0));
         game.move(new Point(1,1));
         assertTrue(game.validateMove(new Point(5, 7)));
+    }
+
+    @Test
+    public void testNotKo() {
+        Game game = new Game(false, 19);
+        game.fields[0][1] = BoardField.WHITE;
+        game.fields[1][0] = BoardField.WHITE;
+        game.fields[1][2] = BoardField.WHITE;
+        game.fields[2][0] = BoardField.WHITE;
+        game.fields[2][2] = BoardField.WHITE;
+        game.fields[3][0] = BoardField.BLACK;
+        game.fields[3][2] = BoardField.BLACK;
+        game.fields[4][1] = BoardField.BLACK;
+        game.fields[1][1] = BoardField.BLACK;
+        game.fields[2][1] = BoardField.BLACK;
+        game.move(new Point(10, 10));
+        game.move(new Point(3, 1));
+        assertTrue(game.validateMove(new Point(2, 1)));
     }
 }
