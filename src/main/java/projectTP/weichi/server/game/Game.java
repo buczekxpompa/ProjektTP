@@ -1,14 +1,16 @@
 package projectTP.weichi.server.game;
 
 import projectTP.weichi.server.blocks.Point;
+import projectTP.weichi.server.game.bot.Bot;
+import projectTP.weichi.server.game.bot.ExampleBot;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 
 public class Game {
-    BoardField[][] fields;
-    BoardField[][] stateChange;
+    /*private*/ BoardField[][] fields;
+    private BoardField[][] stateChange;
     private boolean blackPassed = false;
     private boolean whitePassed = false;
     private boolean blacksTurn = true;
@@ -20,7 +22,7 @@ public class Game {
     private BoardField[][][] twoLastMoves;
     private Point[] twoLastPoints = new Point[]{new Point(0, 0), new Point(0, 0)};
 
-    private  Bot aiBot = null;
+    private Bot aiBot = null;
     private int boardSize;
     private int blackPoints = 0;
     private int whitePoints = 7;
@@ -59,8 +61,12 @@ public class Game {
         return aiBot != null;
     }
 
+    public BoardField getField(int x, int y) {
+        return fields[x][y];
+    }
+
     private void addBot() {
-        aiBot = new Bot(this);
+        aiBot = new ExampleBot(this);
     }
 
     public int getSize() {
@@ -70,6 +76,7 @@ public class Game {
     public boolean won() {
         return blackPassed && whitePassed;
     }
+
     public String move(Point point) {
         int x = point.getX();
         int y = point.getY();
@@ -140,7 +147,7 @@ public class Game {
         return !(occupied(point) || koViolation(point) || !(!preDead(point, false) || capture(point)));
     }
 
-    private boolean capture(Point point) {
+    public boolean capture(Point point) {
         int x = point.getX();
         int y = point.getY();
 
@@ -263,12 +270,61 @@ public class Game {
         return fields[x][y] != BoardField.EMPTY;
     }
 
-    private int countTerritory(BoardField bField) {
+    int countTerritory(BoardField bField) {
         int out = 0;
         if(bField == BoardField.BLACK) out += blackPoints;
         else out += whitePoints;
 
-        //TODO: implement
+        for(int i = 0; i < boardSize; i++){
+            for(int j = 0; j < boardSize; j++) {
+                pot = new ArrayList<>();
+                visited = new ArrayList<>();
+                if(territory(new Point(i, j), bField))
+                    out++;
+            }
+        }
+
+
+        return out;
+    }
+
+    private boolean territory(Point point, BoardField bField) {
+        int x = point.getX();
+        int y = point.getY();
+        if(fields[x][y] != BoardField.EMPTY) return false;
+        if(bField == BoardField.BLACK) {
+            if(x-1 >= 0 && fields[x-1][y] == BoardField.WHITE) return false;
+            if(y-1 >= 0 && fields[x][y-1] == BoardField.WHITE) return false;
+            if(y+1 < boardSize && fields[x][y+1] == BoardField.WHITE) return false;
+            if(x+1 < boardSize && fields[x+1][y] == BoardField.WHITE) return false;
+        } else {
+            if(x-1 >= 0 && fields[x-1][y] == BoardField.BLACK) return false;
+            if(y-1 >= 0 && fields[x][y-1] == BoardField.BLACK) return false;
+            if(y+1 < boardSize && fields[x][y+1] == BoardField.BLACK) return false;
+            if(x+1 < boardSize && fields[x+1][y] == BoardField.BLACK) return false;
+        }
+
+        if(x-1 >= 0 && fields[x-1][y] == BoardField.EMPTY) pot.add(new Point(x-1, y));
+        if(y-1 >= 0 && fields[x][y-1] == BoardField.EMPTY) pot.add(new Point(x, y-1));
+        if(y+1 < boardSize && fields[x][y+1] == BoardField.EMPTY) pot.add(new Point(x, y+1));
+        if(x+1 < boardSize && fields[x+1][y] == BoardField.EMPTY) pot.add(new Point(x+1, y));
+
+        boolean out = true;
+
+        for(int i = 0; i < pot.size(); i++) {
+            boolean visit = false;
+            for (Point value : visited) {
+                if (pot.get(i).getX() == value.getX() && pot.get(i).getY() == value.getY()) {
+                    visit = true;
+                    break;
+                }
+            }
+            if(!visit) {
+                visited.add(pot.get(i));
+                pot.remove(pot.get(i));
+                out = out && territory(pot.get(i), bField);
+            }
+        }
 
         return out;
     }

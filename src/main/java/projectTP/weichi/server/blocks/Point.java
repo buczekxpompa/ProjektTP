@@ -28,4 +28,14 @@ public class Point {
     public int getY() {
         return y;
     }
+
+    // Not used, but cool for the future
+    public boolean equals(Point comprised) {
+        return this.getY() == comprised.getY() && this.getX() == comprised.getX();
+    }
+
+    // Not used, but cool for the future
+    public static boolean equals(Point point1, Point point2 ) {
+        return point1.getY() == point2.getY() && point1.getX() == point2.getX();
+    }
 }
