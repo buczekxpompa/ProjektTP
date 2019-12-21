@@ -18,7 +18,7 @@ public class Game {
     private ArrayList<Point> pot = new ArrayList<>();
     private Point origin;
     private BoardField[][][] twoLastMoves;
-    private Point[] twoLastPoints;
+    private Point[] twoLastPoints = new Point[]{new Point(0, 0), new Point(0, 0)};
 
     private  Bot aiBot = null;
     private int boardSize;
@@ -39,8 +39,6 @@ public class Game {
             }
         }
         randomID();
-
-        twoLastPoints = new Point[]{new Point(0, 0), new Point(0, 0)};
     }
 
     public Game() {
@@ -90,17 +88,19 @@ public class Game {
 
         int capturePoints = 0;
         if(blacksTurn) {
-            if(x-1 >= 0 && fields[x-1][y] == BoardField.WHITE && dead(new Point(x-1, y), true)) capturePoints += kill(new Point(x-1, y));
-            if(x+1 < boardSize && fields[x+1][y] == BoardField.WHITE && dead(new Point(x+1, y), true)) capturePoints += kill(new Point(x+1, y));
-            if(y+1 < boardSize && fields[x][y+1] == BoardField.WHITE && dead(new Point(x, y+1), true)) capturePoints += kill(new Point(x, y+1));
-            if(y-1 >= 0 && fields[x][y-1] == BoardField.WHITE && dead(new Point(x, y-1), true)) capturePoints += kill(new Point(x, y-1));
+            if(x-1 >= 0 && fields[x-1][y] == BoardField.WHITE && preDead(new Point(x-1, y), true)) capturePoints += kill(new Point(x-1, y));
+            if(x+1 < boardSize && fields[x+1][y] == BoardField.WHITE && preDead(new Point(x+1, y), true)) capturePoints += kill(new Point(x+1, y));
+            if(y+1 < boardSize && fields[x][y+1] == BoardField.WHITE && preDead(new Point(x, y+1), true)) capturePoints += kill(new Point(x, y+1));
+            if(y-1 >= 0 && fields[x][y-1] == BoardField.WHITE && preDead(new Point(x, y-1), true)) capturePoints += kill(new Point(x, y-1));
             blackPoints += capturePoints;
+            twoLastMoves[0] = fields.clone();
         } else {
-            if(x-1 >= 0 && fields[x-1][y] == BoardField.BLACK && dead(new Point(x-1, y), true)) capturePoints += kill(new Point(x-1, y));
-            if(x+1 < boardSize && fields[x+1][y] == BoardField.BLACK && dead(new Point(x+1, y), true)) capturePoints += kill(new Point(x+1, y));
-            if(y+1 < boardSize && fields[x][y+1] == BoardField.BLACK && dead(new Point(x, y+1), true)) capturePoints += kill(new Point(x, y+1));
-            if(y-1 >= 0 && fields[x][y-1] == BoardField.BLACK && dead(new Point(x, y-1), true)) capturePoints += kill(new Point(x, y-1));
+            if(x-1 >= 0 && fields[x-1][y] == BoardField.BLACK && preDead(new Point(x-1, y), true)) capturePoints += kill(new Point(x-1, y));
+            if(x+1 < boardSize && fields[x+1][y] == BoardField.BLACK && preDead(new Point(x+1, y), true)) capturePoints += kill(new Point(x+1, y));
+            if(y+1 < boardSize && fields[x][y+1] == BoardField.BLACK && preDead(new Point(x, y+1), true)) capturePoints += kill(new Point(x, y+1));
+            if(y-1 >= 0 && fields[x][y-1] == BoardField.BLACK && preDead(new Point(x, y-1), true)) capturePoints += kill(new Point(x, y-1));
             whitePoints += capturePoints;
+            twoLastMoves[1] = fields.clone();
         }
 
         for(int i = 0; i < boardSize; i++) {
@@ -137,7 +137,7 @@ public class Game {
     // ***** RULES ***** //
 
     public boolean validateMove(Point point) {
-        return !(occupied(point) || koViolation(point) || !(!dead(point, false) || capture(point)));
+        return !(occupied(point) || koViolation(point) || !(!preDead(point, false) || capture(point)));
     }
 
     private boolean capture(Point point) {
@@ -145,15 +145,15 @@ public class Game {
         int y = point.getY();
 
         if(blacksTurn) {
-            if(x-1 >= 0 && fields[x-1][y] == BoardField.WHITE && dead(new Point(x-1, y), true)) return true;
-            if(x+1 < boardSize && fields[x+1][y] == BoardField.WHITE && dead(new Point(x+1, y), true)) return true;
-            if(y+1 < boardSize && fields[x][y+1] == BoardField.WHITE && dead(new Point(x, y+1), true)) return true;
-            return y - 1 >= 0 && fields[x][y - 1] == BoardField.WHITE && dead(new Point(x, y - 1), true);
+            if(x-1 >= 0 && fields[x-1][y] == BoardField.WHITE && preDead(new Point(x-1, y), true)) return true;
+            if(x+1 < boardSize && fields[x+1][y] == BoardField.WHITE && preDead(new Point(x+1, y), true)) return true;
+            if(y+1 < boardSize && fields[x][y+1] == BoardField.WHITE && preDead(new Point(x, y+1), true)) return true;
+            return y - 1 >= 0 && fields[x][y - 1] == BoardField.WHITE && preDead(new Point(x, y - 1), true);
         } else {
-            if(x-1 >= 0 && fields[x-1][y] == BoardField.BLACK && dead(new Point(x-1, y), true)) return true;
-            if(x+1 < boardSize && fields[x+1][y] == BoardField.BLACK && dead(new Point(x+1, y), true)) return true;
-            if(y+1 < boardSize && fields[x][y+1] == BoardField.BLACK && dead(new Point(x, y+1), true)) return true;
-            return y - 1 >= 0 && fields[x][y - 1] == BoardField.BLACK && dead(new Point(x, y - 1), true);
+            if(x-1 >= 0 && fields[x-1][y] == BoardField.BLACK && preDead(new Point(x-1, y), true)) return true;
+            if(x+1 < boardSize && fields[x+1][y] == BoardField.BLACK && preDead(new Point(x+1, y), true)) return true;
+            if(y+1 < boardSize && fields[x][y+1] == BoardField.BLACK && preDead(new Point(x, y+1), true)) return true;
+            return y - 1 >= 0 && fields[x][y - 1] == BoardField.BLACK && preDead(new Point(x, y - 1), true);
         }
     }
 
@@ -178,6 +178,12 @@ public class Game {
         }
 
         return out;
+    }
+
+    private boolean preDead(Point point, boolean toKill) {
+        visited = new ArrayList<>();
+        pot = new ArrayList<>();
+        return dead(point, toKill);
     }
 
     private boolean dead(Point point, boolean toKill) {
@@ -205,18 +211,18 @@ public class Game {
             if(y-1 >= 0 && fields[x][y-1] == BoardField.WHITE) pot.add(new Point(x, y-1));
         }
 
-        for(Point pt : pot) {
+        for(int i = 0; i < pot.size(); i++) {
             boolean visit = false;
             for(Point v :visited) {
-                if(pt.getX() == v.getX() && pt.getY() == v.getY()) {
+                if(pot.get(i).getX() == v.getX() && pot.get(i).getY() == v.getY()) {
                     visit = true;
-                    pot.remove(pt);
+                    pot.remove(pot.get(i));
                     break;
                 }
             }
             if(!visit) {
-                visited.add(pt);
-                if(!dead(pt, toKill)) {
+                visited.add(pot.get(i));
+                if(!dead(pot.get(i), toKill)) {
                     return false;
                 }
             }
@@ -228,12 +234,10 @@ public class Game {
         if(blacksTurn) {
             for(int j = 0; j < boardSize; j++) {
                 for(int i = 0; i < boardSize; i++) {
-                    if(twoLastMoves[0][j][i] != fields[j][i]) {
-                        twoLastMoves[0] = fields.clone();
-                        return false;
-                    }
+                    if(twoLastMoves[0][j][i] != fields[j][i]) return false;
                 }
             }
+
             if(!(twoLastPoints[0].getX() == point.getX() && twoLastPoints[0].getY() == point.getY())){
                 twoLastPoints[0] = point;
                 return false;
@@ -241,12 +245,10 @@ public class Game {
         } else {
             for(int j = 0; j < boardSize; j++) {
                 for(int i = 0; i < boardSize; i++) {
-                    if(twoLastMoves[1][j][i] != fields[j][i]) {
-                        twoLastMoves[1] = fields.clone();
-                        return false;
-                    }
+                    if(twoLastMoves[1][j][i] != fields[j][i]) return false;
                 }
             }
+
             if(!(twoLastPoints[1].getX() == point.getX() && twoLastPoints[1].getY() == point.getY())){
                 twoLastPoints[1] = point;
                 return false;

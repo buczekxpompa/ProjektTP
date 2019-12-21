@@ -27,16 +27,17 @@ public class KoTest {
     @Test
     public void testNotKo() {
         Game game = new Game(false, 19);
-        game.fields[0][1] = BoardField.WHITE;
-        game.fields[1][0] = BoardField.WHITE;
-        game.fields[1][2] = BoardField.WHITE;
-        game.fields[2][0] = BoardField.WHITE;
-        game.fields[2][2] = BoardField.WHITE;
-        game.fields[3][0] = BoardField.BLACK;
-        game.fields[3][2] = BoardField.BLACK;
-        game.fields[4][1] = BoardField.BLACK;
-        game.fields[1][1] = BoardField.BLACK;
-        game.fields[2][1] = BoardField.BLACK;
+        game.move(new Point(2, 1));
+        game.move(new Point(0, 1));
+        game.move(new Point(3, 0));
+        game.move(new Point(1, 0));
+        game.move(new Point(3, 2));
+        game.move(new Point(1, 2));
+        game.move(new Point(4, 1));
+        game.move(new Point(2, 0));
+        game.move(new Point(1, 1));
+        game.move(new Point(2, 2));
+
         game.move(new Point(10, 10));
         game.move(new Point(3, 1));
         assertTrue(game.validateMove(new Point(2, 1)));
