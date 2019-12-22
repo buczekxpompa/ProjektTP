@@ -203,9 +203,7 @@ package Client {
         Observer <|.. GameFrameObserver
         Observer <|.. LobbyObserver
         Observer <|.. SizeFrameObserver
-        ObservableEvent .. SizeFrameObserver
-        ObservableEvent .. GameFrameObserver
-        ObservableEvent .. LobbyObserver
+        ObservableEvent . Observer
     }
     package frames {
         package elements {
