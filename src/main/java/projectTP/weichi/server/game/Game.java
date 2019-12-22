@@ -7,6 +7,8 @@ import projectTP.weichi.server.game.bot.ExampleBot;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static java.lang.Thread.sleep;
+
 
 public class Game {
     /*private*/ BoardField[][] fields;
@@ -20,7 +22,7 @@ public class Game {
     private ArrayList<Point> pot = new ArrayList<>();
     private Point origin;
     private BoardField[][][] twoLastMoves;
-    private Point[] twoLastPoints = new Point[]{new Point(0, 0), new Point(0, 0)};
+    private Point[] twoLastPoints = new Point[]{new Point(-1, -2), new Point(-1, -2)};
 
     private Bot aiBot = null;
     private int boardSize;
@@ -80,10 +82,11 @@ public class Game {
     public String move(Point point) {
         int x = point.getX();
         int y = point.getY();
+        System.out.println("new: " + x + " " + y);
         StringBuilder output = new StringBuilder();
         if(x == -2 && y == -2) return pass();
         if(!validateMove(point)) return output.toString();
-
+        System.out.println("legal move");
         unPass();
         for(int i = 0; i < boardSize; i++) {
             System.arraycopy(fields[i], 0, stateChange[i], 0, boardSize);
@@ -101,6 +104,7 @@ public class Game {
             if(y-1 >= 0 && fields[x][y-1] == BoardField.WHITE && preDead(new Point(x, y-1), true)) capturePoints += kill(new Point(x, y-1));
             blackPoints += capturePoints;
             twoLastMoves[0] = fields.clone();
+            twoLastPoints[0] = point;
         } else {
             if(x-1 >= 0 && fields[x-1][y] == BoardField.BLACK && preDead(new Point(x-1, y), true)) capturePoints += kill(new Point(x-1, y));
             if(x+1 < boardSize && fields[x+1][y] == BoardField.BLACK && preDead(new Point(x+1, y), true)) capturePoints += kill(new Point(x+1, y));
@@ -108,6 +112,7 @@ public class Game {
             if(y-1 >= 0 && fields[x][y-1] == BoardField.BLACK && preDead(new Point(x, y-1), true)) capturePoints += kill(new Point(x, y-1));
             whitePoints += capturePoints;
             twoLastMoves[1] = fields.clone();
+            twoLastPoints[1] = point;
         }
 
         for(int i = 0; i < boardSize; i++) {
@@ -234,10 +239,12 @@ public class Game {
                 }
             }
         }
+        System.out.println("dead");
         return true;
     }
 
     private boolean koViolation(Point point) {
+
         if(blacksTurn) {
             for(int j = 0; j < boardSize; j++) {
                 for(int i = 0; i < boardSize; i++) {
@@ -246,7 +253,6 @@ public class Game {
             }
 
             if(!(twoLastPoints[0].getX() == point.getX() && twoLastPoints[0].getY() == point.getY())){
-                twoLastPoints[0] = point;
                 return false;
             }
         } else {
@@ -257,16 +263,18 @@ public class Game {
             }
 
             if(!(twoLastPoints[1].getX() == point.getX() && twoLastPoints[1].getY() == point.getY())){
-                twoLastPoints[1] = point;
                 return false;
             }
         }
+        System.out.println("ko");
         return true;
     }
 
     private boolean occupied(Point point) {
         int x = point.getX();
         int y = point.getY();
+        if(fields[x][y] != BoardField.EMPTY)
+            System.out.println("ko");
         return fields[x][y] != BoardField.EMPTY;
     }
 
@@ -321,8 +329,8 @@ public class Game {
             }
             if(!visit) {
                 visited.add(pot.get(i));
-                pot.remove(pot.get(i));
                 out = out && territory(pot.get(i), bField);
+                pot.remove(pot.get(i));
             }
         }
 
@@ -335,6 +343,11 @@ public class Game {
     }
 
     public Point botMove() {
+        try {
+            sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return aiBot.bestMove();
     }
 }

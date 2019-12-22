@@ -64,6 +64,7 @@ public class ServerParserJson implements ServerParser {
 
     @Override
     public String parseMoveResponse() {
+        System.out.println(parsedLine);
         StringBuilder builder = new StringBuilder();
         builder.append("[");
         String[] args = parsedLine.split("\"");
@@ -104,7 +105,6 @@ public class ServerParserJson implements ServerParser {
         }
         if(out.lastIndexOf(",") != -1) out.deleteCharAt(out.lastIndexOf(","));
         out.append("]");
-        System.out.println(out.toString());
         return out.toString();
     }
 

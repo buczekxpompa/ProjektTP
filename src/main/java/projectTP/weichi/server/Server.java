@@ -131,8 +131,8 @@ public class Server {
                 String response = parser.parseMoveResponse();
                 output.println(response);
 
-                x = game.botMove();
-                parser.setLine(game.move(x));
+
+                parser.setLine(game.move(game.botMove()));
                 response = parser.parseMoveResponse();
                 output.println(response);
             } while(!game.won());

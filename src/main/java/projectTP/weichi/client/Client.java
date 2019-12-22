@@ -106,6 +106,7 @@ public class Client {
         gameFrame = new GameFrame(size, "BLACK", line);
         gameFrame.addObserver( new GameFrameObserver(this));
         if (!bot) {
+            System.out.println("bez bota");
             Thread thread = new Thread() {
                 @Override
                 public void run() {
