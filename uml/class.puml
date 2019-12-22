@@ -56,12 +56,16 @@ package Server {
             -boolean koViolation(Point)
             -int countTerritory(BoardField color)
         }
-        class Bot {
-            -Game game
-            ~Point bestMove()
-            -int evaluatePoint()
+        interface Bot {
+            Point bestMove()
+        }
+        class ExampleBot {
+            Game game
+            --Implemented functions--
+            +Point bestMove()
         }
         Bot -* Game
+        Bot <|.. ExampleBot
     }
     package parser {
         interface ServerParser{
@@ -75,7 +79,7 @@ package Server {
         }
         class ServerParserJson {
             -String parsedLine
-            -- implemened functions --
+            -- implemented functions --
             +setLine()
             +Point parsePoint()
             +GameConfig parseGameConfig()
@@ -96,7 +100,7 @@ package Server {
         enum BoardField {
             BLACK
             WHITE
-            WMPTY
+            EMPTY
         }
         class CombinedGame {
             -Game game
